@@ -6,15 +6,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class Main {
+	
 static int[] dr = {0,0,-1,1,0,0};
 static int[] dc = {0,0,0,0,-1,1};
 static int[] dh = {-1,1,0,0,0,0};
 
 static int[][][] map;
-static boolean[][][] visited;
+
 
 static int H,N,M;
 
@@ -44,7 +44,6 @@ static class Node{
 		H = Integer.parseInt(st.nextToken());
 		
 		map = new int[H][N][M];
-		visited = new boolean[H][N][M];
 		
 		for(int h=0; h<H; h++) {
 			for(int n=0; n<N; n++) {
@@ -53,7 +52,6 @@ static class Node{
 					map[h][n][m] = Integer.parseInt(st.nextToken());
 					if(map[h][n][m]==1) {
 						queue.add(new Node(h,n,m,0));
-						visited[h][n][m] = true;
 					}
 				}
 			}
@@ -76,9 +74,8 @@ static class Node{
 				
 				if(dk<0 || dk>=H || du <0 || du>=N || dv <0 || dv>=M ) continue;
 				
-				if(!visited[dk][du][dv]&& map[dk][du][dv]==0) {
+				if(map[dk][du][dv]==0) {
 					map[dk][du][dv]=1;
-					visited[dk][du][dv] = true;
 					queue.add(new Node(dk, du, dv, now.rank+1));
 				}
 			}
