@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 class Solution {
-    public int[] solution(String today, String[] terms, String[] privacies) {
+    public List<Integer> solution(String today, String[] terms, String[] privacies) {
          int N = privacies.length;
         
         String[][] priva = new String[N][2];
@@ -18,6 +18,7 @@ class Solution {
         }
         
         List<Integer> list = new LinkedList<>();
+        
         String[] dead = new String[3];
         int[] deadline = new int[3];
         String[] comp = today.split("\\.");
@@ -46,7 +47,10 @@ class Solution {
                     }
                     //하루를 빼놓은 deadline에서 유효기간 더하기.
                     int plus = Integer.parseInt(splitTerms[m][1]);
-                    
+                    //24 27 
+                    //24 
+                    //mm  = 12 0
+                    //yy = +1  +2
                     int mm = deadline[1]+plus%12;
                     
                     if(mm>12) {
@@ -65,9 +69,9 @@ class Solution {
             }
            
                 //연도 비교
-                if(deadline[0]<comparison[0]) list.add(n);
-                else if(deadline[0]==comparison[0] && deadline[1]<comparison[1]) list.add(n);
-                else if(deadline[0]==comparison[0] && deadline[1]==comparison[1] && deadline[2]<comparison[2]) list.add(n);
+                if(deadline[0]<comparison[0]) list.add(n+1);
+                else if(deadline[0]==comparison[0] && deadline[1]<comparison[1]) list.add(n+1);
+                else if(deadline[0]==comparison[0] && deadline[1]==comparison[1] && deadline[2]<comparison[2]) list.add(n+1);
                 
             
             
@@ -81,6 +85,6 @@ class Solution {
         }
      
         
-        return answer;
+        return list;
     }
 }
