@@ -10,18 +10,19 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
         final int M = 1234567891;
+        long pow = 1;
         String str = br.readLine();
-        double sum = 0;
+        long sum = 0;
 
         for(int n=0; n<N; n++){
-            int a = (int) str.charAt(n) - 96;
+            sum += (str.charAt(n) - 96) *pow;
 
-            sum +=(a * (Math.pow(31, n))) % M;
+            pow = (pow*31) % M;
 
 
         }
 
 
-        System.out.println((long) sum);
+        System.out.println(sum%M);
     }
 }
