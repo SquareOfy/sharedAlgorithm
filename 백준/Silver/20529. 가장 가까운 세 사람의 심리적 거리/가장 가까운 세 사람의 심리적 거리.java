@@ -23,17 +23,23 @@ public class Main {
 
             st = new StringTokenizer(br.readLine());
 
+            if(N>32){
+                System.out.println(0);
+                
+            }else{
+                min = Integer.MAX_VALUE;
+                mbti = new String[N];
+                visitied= new boolean[N];
+                selected = new String[3];
+                for(int n=0; n<N; n++){
+                    mbti[n] = st.nextToken();
+                }
 
-            min = Integer.MAX_VALUE;
-            mbti = new String[N];
-            visitied= new boolean[N];
-            selected = new String[3];
-            for(int n=0; n<N; n++){
-                mbti[n] = st.nextToken();
+                comb(0, 0);
+                System.out.println(min);
             }
 
-            comb(0, 0);
-            System.out.println(min);
+          
 
         }
 
