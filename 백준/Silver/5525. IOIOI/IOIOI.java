@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
 
@@ -19,11 +20,48 @@ public class Main {
             sb.append("OI");
         }
         String target = sb.toString();
+
+        int[] table = makeTable(target);
+
         int cnt = 0;
-        for(int i=0; i<M-target.length()+1; i++){
-            if(s.substring(i, i+(2*N +1)).equals(target)) cnt++;
+
+
+
+        int idx =0;
+        for(int i=0; i<M; i++){
+
+            while(idx>0 && s.charAt(i) != target.charAt(idx)){
+                idx = table[idx-1];
+            }
+            if(s.charAt(i)==target.charAt(idx)) {
+                if (idx == target.length()-1) {
+                    cnt++;
+//                    System.out.printf("%d번째에서 찾았습니다. \n", i-target.length()+2);
+                    idx = table[idx];
+                } else {
+                    idx++;
+                }
+            }
         }
 
         System.out.println(cnt);
+    }
+
+
+    static int[] makeTable(String pattern) {
+        int n = pattern.length();
+        int[] table = new int[n];
+
+        int idx=0;
+        for(int i=1; i<n; i++){
+            while(idx>0 && pattern.charAt(i) != pattern.charAt(idx)){
+                idx = table[idx-1];
+            }
+            if(pattern.charAt(i)==pattern.charAt(idx)){
+                table[i] = ++idx;
+            }
+
+        }
+        return table;
     }
 }
