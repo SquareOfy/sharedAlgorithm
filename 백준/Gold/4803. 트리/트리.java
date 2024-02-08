@@ -12,9 +12,7 @@ public class Main {
     static int N, M;
 
     static int cnt;
-    static boolean[] visited;
     static List<Integer> cycle;
-    static List<Integer>[] edges;
 
     public static void main(String[] args) throws IOException {
 
@@ -31,26 +29,59 @@ public class Main {
             idx++;
             cnt = 0;
             cycle = new ArrayList<>();
-            edges = new ArrayList[N + 1];
-            visited = new boolean[N + 1];
+            List<Integer>[] edges = new ArrayList[N + 1];
+            boolean[] visited = new boolean[N + 1];
 
             for (int n = 0; n <= N; n++) {
                 edges[n] = new ArrayList<>();
             }
+            int[] p = new int[N + 1];
+            for (int i = 1; i <= N; i++) {
+                p[i] = i;
+            }
+
 
             for (int m = 0; m < M; m++) {
                 st = new StringTokenizer(br.readLine());
                 int start = Integer.parseInt(st.nextToken());
                 int end = Integer.parseInt(st.nextToken());
-                edges[start].add(end);
-                edges[end].add(start); //풀이 참고
+                union(p, start, end);
             }
 
+
+            Set<Integer> set = new HashSet<>();
             for (int i = 1; i <= N; i++) {
-                if (!visited[i]) {
-                    cnt += checkTree(i);
+
+                int pi = findParents(p, i);
+                if(pi>0){
+                    set.add(pi);
                 }
             }
+            cnt = set.size();
+
+
+//            for (int i = 1; i <= N; i++) {
+//                //사이클 확인
+//                if (cycle.contains(findParents(p, i)) || visited[p[i]]) continue;
+//                int edgesCnt = edges[i].size();
+//                int nodeCnt = 1;
+//                visited[p[i]] = true;
+//                for (int j = i + 1; j <= N; j++) {
+//                    if (p[i] == p[j]) {
+//                        nodeCnt++;
+//                        edgesCnt += edges[j].size();
+//                    }
+//
+//                }
+
+
+//                System.out.println(" i : "+ i);
+//                System.out.println("node : " + nodeCnt);
+//
+//                System.out.println("edges : " + edgesCnt);
+//                if (nodeCnt - edgesCnt / 2 == 1) cnt++;
+
+//            }
 
 
             sb.append("Case ").append(idx).append(": ");
@@ -67,27 +98,30 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
     }
 
-    public static int checkTree(int root) {
-        Queue<Integer> queue = new LinkedList<>();
-        int node = 0;
-        int edge = 0;
+    public static void union(int[] p, int x, int y) {
 
-        queue.add(root);
-
-        while (!queue.isEmpty()) {
-            int now = queue.poll();
-
-            if (visited[now]) continue;
-            visited[now] = true;
-            node++;
-
-            for (int i = 0; i < edges[now].size(); i++) {
-                edge++;
-                int next = edges[now].get(i);
-                if (!visited[next]) queue.add(next);
-            }
+        if (x == y) {
+            cycle.add(x);
+            return;
         }
+        int px = findParents(p, x);
+        int py = findParents(p, y);
 
-        return (edge / 2) + 1 == node ? 1 : 0;
+
+        if (px == py) {
+            p[px] = 0;
+            return;
+        }
+        if (px < py) p[py] = p[px];
+        else p[px] = p[py];
+
     }
+
+
+    public static int findParents(int[] p, int x) {
+        if (p[x] == x) return x;
+        p[x] = findParents(p, p[x]);
+        return p[x];
+    }
+
 }
