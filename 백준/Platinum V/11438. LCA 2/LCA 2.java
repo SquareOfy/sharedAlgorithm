@@ -3,93 +3,119 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n, h;
-    static List<Integer>[] list;
-    static int[][] parent;
-    static int[] depth;
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
 
-        list = new ArrayList[n+1];
-        for(int i=1; i<n+1; i++) {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    static StringBuilder sb = new StringBuilder();
+
+
+    static int N,M;
+    static int H;
+
+    static int[][] parents;
+    static int[] depth;
+    static ArrayList<Integer>[] list;
+
+    public static void main(String[] args) throws IOException {
+
+        input();
+        dfs(1, 0, 1);
+        setParents();
+        
+        for(int m=0; m<M; m++){
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+
+            int answer = lca(a,b);
+            sb.append(answer).append("\n");
+
+
+
+
+        }
+
+
+        System.out.println(sb);
+
+
+    }
+
+
+
+
+    public static void input() throws IOException {
+        N = Integer.parseInt(br.readLine());
+
+       list = new ArrayList[N+1];
+        for(int i=0; i<=N; i++){
             list[i] = new ArrayList<>();
         }
-        StringTokenizer st = null;
-        for(int i=0; i<n-1; i++) {
+
+        for(int i=0; i<N-1; i++){
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             list[a].add(b);
             list[b].add(a);
         }
+        H = (int) Math.ceil(Math.log(N)/Math.log(2))+1;
+        depth = new int[N+1];
+        parents = new int[N+1][H];
 
-        h = getTreeHeight();
-        depth = new int[n+1];
-        parent = new int[n+1][h];
+        M = Integer.parseInt(br.readLine());
+    }
 
-        init(1,1,0);
-        fillParents();
+    public static void dfs(int a,  int par, int dep){
 
-        StringBuilder sb = new StringBuilder();
-        int m = Integer.parseInt(br.readLine());
-        for(int i=0; i<m; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            sb.append(LCA(a,b)+"\n");
+        depth[a] = dep;
+
+        for(int i:list[a]){
+            if(i==par) continue;
+            dfs(i, a, dep +1);
+            parents[i][0] = a;
+
+
         }
-        System.out.println(sb.toString());
-    }
 
-    static int getTreeHeight() {
-        return(int)Math.ceil(Math.log(n)/Math.log(2)) +1;
     }
-    static void init(int cur, int h, int pa) {
-        depth[cur] = h;
-        for(int nxt : list[cur]) {
-            if(nxt != pa) {
-                init(nxt, h+1, cur);
-                parent[nxt][0] = cur; // nxt의 부모 cur
+    public static void setParents(){
+        for(int j=1; j<H; j++){
+            for(int i=1; i<=N; i++){
+                parents[i][j] = parents[parents[i][j-1]][j-1];
             }
         }
     }
 
-    static void fillParents() {
-        for(int i=1; i<h; i++) {
-            for(int j=1; j<n+1; j++) {
-                parent[j][i] = parent[parent[j][i-1]][i-1];
-            }
-        }
-    }
-
-    static int LCA(int a, int b) {
-        int ah = depth[a];
-        int bh = depth[b];
-        // ah > bh로 세팅
-        if(ah < bh) {
+    public static int lca(int a, int b){
+        if(depth[a]>depth[b]){
             int tmp = a;
             a = b;
             b = tmp;
         }
 
-        for (int i=h-1; i>=0; i--) {
-            if(Math.pow(2, i) <= depth[a] - depth[b]){
-                a = parent[a][i];
-            }
-        }
-        if(a==b) return a;
+        for(int i= H-1; i>=0; i--){
 
-        for(int i=h-1; i>=0; i--) {
-            if(parent[a][i] != parent[b][i]) {
-                a = parent[a][i];
-                b = parent[b][i];
+            if(depth[b]-depth[a] >= (1<<i)){
+                b = parents[b][i];
+            }
+//            if(Math.pow(2, i) <= depth[b] - depth[a]){
+//                b = parents[b][i];
+//            }
+        }
+
+        if(a==b) return a;
+        for(int i=H-1; i>=0; i--){
+            if(parents[a][i]!=parents[b][i]){
+                a = parents[a][i];
+                b = parents[b][i];
             }
         }
-        return parent[a][0];
+
+        return parents[a][0];
     }
 }
