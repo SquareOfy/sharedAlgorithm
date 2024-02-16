@@ -20,6 +20,7 @@ public class Main {
 
     static boolean[] visited;
 
+    static int answer;
     public static class Edge{
         int node;
         int distance;
@@ -43,10 +44,11 @@ public class Main {
             int b = Integer.parseInt(st.nextToken());
 
 
+            answer = 0;
             visited = new boolean[N+1];
 
-            int answer= getDistance(a,b);
 
+            dfs(a,b,0);
             sb.append(answer).append("\n");
         }
 
@@ -56,24 +58,17 @@ public class Main {
 
     }
 
-    public static int getDistance(int a, int b){
 
-        visited[a] = true;
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{a, 0});
 
-        while(!queue.isEmpty()){
-            int[] now = queue.poll();
+    public static void dfs(int now, int end, int distance){
+        if(now==end) answer = distance;
 
-            if(now[0]==b) return now[1];
-            for(Edge next : edges[now[0]]){
-                if(!visited[next.node]){
-                    visited[next.node] = true;
-                    queue.add(new int[] {next.node, now[1]+next.distance});
-                }
+        visited[now] = true;
+        for(Edge next : edges[now]){
+            if(!visited[next.node]){
+                dfs(next.node, end, distance+next.distance);
             }
         }
-        return -1;
     }
 
     public static void input() throws IOException {
