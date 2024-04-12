@@ -16,21 +16,21 @@ public class Main {
 
     public static int pro(String original, String target) {
 
-        String str = target;
-        while (true) {
-            if(str.length()<=original.length()) return 0;
+        while (original.length()<target.length()) {
             //문자열 맨 뒤가 A이면 A 떼기
-            if (str.charAt(str.length() - 1) == 'A') {
+            if (target.charAt(target.length() - 1) == 'A') {
 
-                str = str.substring(0, str.length() - 1);
+                target = target.substring(0, target.length() - 1);
             } else {
                 //문자열 맨 뒤가 B면 떼고 뒤집기
-                str = str.substring(0, str.length() - 1);
-                str = reverse(str);
+                target = target.substring(0, target.length() - 1);
+                target = reverse(target);
             }
-            if(str.equals(original)) return 1;
 
         }
+
+        if(target.equals(original)) return 1;
+        else return 0;
 
 
     }
