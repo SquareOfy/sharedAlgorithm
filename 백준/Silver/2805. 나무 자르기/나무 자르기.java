@@ -1,52 +1,56 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
 public class Main {
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+    static int N,M;
+    static int[] arr;
 
+    public static void main(String[] args) throws IOException {
+        input();
 
-        long[] tree = new long[N];
+        int answer = binary_search();
+
+        System.out.println(answer);
+    }
+
+    public static int binary_search(){
+        int start = 0 ;
+        int end = Arrays.stream(arr).max().getAsInt();
+
+        while(start + 1 < end){
+            int mid = (start + end)/2;
+            if(check(mid)) start = mid;
+            else end = mid;
+        }
+
+        return start;
+    }
+
+    public static boolean check(int mid){
+        long sum =0;
+        for(int i=0; i<N; i++){
+            if(arr[i]>mid) sum+= arr[i]-mid;
+        }
+
+        return sum>=M;
+    }
+
+    public static void input() throws IOException {
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        arr = new int[N];
         st = new StringTokenizer(br.readLine());
         for(int n=0; n<N; n++){
-            tree[n] = Integer.parseInt(st.nextToken());
+            arr[n] = Integer.parseInt(st.nextToken());
         }
-
-        long max = Arrays.stream(tree).max().getAsLong();
-        long min = 0;
-        long target = (max+min) /2;
-
-
-        long height = 0;
-
-
-        while(min<=max){
-            target = (max+min)/2;
-
-
-            height =0;
-            for(int i=0; i<N; i++){
-                if(tree[i]>target) height += tree[i] - target;
-
-            }
-
-
-            if(height-M>0) {
-                min = target+1;
-
-            }
-            else if(height-M<0){
-                max = target-1;
-            }
-            else break;
-
-
-        }
-
-        System.out.println((min+max)/2);
     }
 }
