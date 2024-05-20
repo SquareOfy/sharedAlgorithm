@@ -34,15 +34,18 @@ public class Main {
         });
 
         medals[0][4]=1;
+        int cnt =1;
 
         outer: for(int i=1; i<N; i++){
             for(int j=0; j<3; j++){
                 if(medals[i-1][j]>medals[i][j]){
-                    medals[i][4] = medals[i-1][4]+1;
+                    medals[i][4] = medals[i-1][4]+cnt;
+                    cnt =1;
                     continue outer;
                 }
             }
             medals[i][4] = medals[i-1][4];
+            cnt ++;
         }
 
         for(int i=0; i<N; i++){
