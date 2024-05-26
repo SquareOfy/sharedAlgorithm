@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -11,6 +12,8 @@ public class Main {
 
     static int N;
     static int[] arr;
+    static int[] reverse;
+    static int[] sumArr;
     static boolean[] visited;
     static int answer;
 
@@ -22,7 +25,16 @@ public class Main {
 
         selected = new int[2];
         answer = Integer.MIN_VALUE;
-        pickBeePlace(0, 0);
+        sumArr = arr.clone();
+        reverse = arr.clone();
+
+        for(int i=1; i<=N; i++){
+            sumArr[i] += sumArr[i-1];
+        }
+
+
+
+        pickBeePlace(0, 1);
         System.out.println(answer);
     }
 
@@ -31,10 +43,11 @@ public class Main {
         if(cnt==2){
             //벌자리 다 골랐으면 벌통 자리 정해서 최댓값 계산
             pickBeeHome();
+
             return;
         }
 
-        for(int i = idx; i<N; i++){
+        for(int i = idx; i<=N; i++){
             if(!visited[i]){
                 visited[i] = true;
                 selected[cnt] = i;
@@ -45,30 +58,26 @@ public class Main {
     }
     static  void pickBeeHome(){
 
-        for(int i=0; i<N; i++){
+        for(int i=1; i<=N; i++){
             //벌이 없으면 벌집 놓고 계산
             int cnt =0;
             if(!visited[i]){
-                beeHome = i;
                 //벌 한마리씩 계산
                 for(int j=0; j<2; j++){
                     int bee = selected[j];
+                    int other = selected[(j+1)%2];
                     //벌집이 왼쪽에 위치
-                    if(bee>i) {
-                        for(int k=i; k<bee; k++ ){
-                            if(!visited[k]){
-
-                                cnt+= arr[k];
-                            }
-                        }
+                    if(i<bee) {
+                        cnt+= sumArr[bee-1]-sumArr[i-1];
+                        if(other<bee && i<other) cnt-= arr[other];
                     }else{ //벌집이 오른쪽에 위치
-                        for(int k=bee+1; k<=i; k++){
-                            if(!visited[k]) cnt+= arr[k];
+                        cnt += sumArr[i]-sumArr[bee];
+                        if(other>bee && i>other) cnt-= arr[other];
 
-                        }
                     }
 
                 }
+
                 answer = Math.max(answer, cnt);
             }
         }
@@ -79,9 +88,11 @@ public class Main {
 
         st = new StringTokenizer(br.readLine());
 
-        arr = new int[N];
-        visited = new boolean[N];
-        for(int n=0; n<N; n++){
+        arr = new int[N+1];
+        visited = new boolean[N+1];
+        reverse = new int[N+1];
+        sumArr = new int[N+1];
+        for(int n=1; n<=N; n++){
             arr[n] = Integer.parseInt(st.nextToken());
         }
     }
