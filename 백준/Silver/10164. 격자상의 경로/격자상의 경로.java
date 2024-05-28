@@ -14,53 +14,25 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         input();
+        long[] factorial = new long[N+M+1];
+        factorial[0] = 1;
+        for(int i=1; i<=N+M; i++){
+            factorial[i] = factorial[i-1]*i;
+        }
 
         if(K==0){
-            long answer = 1;
-
-            for(int i=1; i<=N+M-2; i++){
-                answer*=i;
-            }
-
-            for(int i=2; i<=N-1; i++){
-                answer/=i;
-            }
-
-            for(int i=2; i<=M-1; i++){
-                answer/=i;
-            }
-
-            System.out.println(answer);
+            System.out.println(factorial[N+M-2]/factorial[N-1]/factorial[M-1]);
         }else{
 
             //동그라미 위치
-            int r = K/M;
-            int c = K%M-1;
+            int r = K%M != 0 ? K/M : K/M-1;
+            int c = K%M ==0 ? M-1 : K%M-1;
 
 
-            long first = 1;
 
-            for(int i=1; i<=r+c; i++){
-                first*=i;
-            }
-            for(int i=1; i<=r; i++){
-                first/=i;
-            }
-            for(int i=1; i<=c; i++){
-                first/=i;
-            }
+            long first = factorial[r+c]/factorial[r]/factorial[c];
 
-            long second = 1;
-
-            for(int i=1; i<=N+M-r-c-2; i++){
-                second*=i;
-            }
-            for(int i=1; i<=N-r-1; i++){
-                second/=i;
-            }
-            for(int i=1; i<=M-c-1; i++){
-                second/=i;
-            }
+            long second = factorial[N+M-r-c-2]/factorial[N-r-1]/factorial[M-c-1];
 
 
 
