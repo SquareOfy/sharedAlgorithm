@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -14,14 +16,18 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         input();
-        long[] factorial = new long[N+M+1];
-        factorial[0] = 1;
+        BigInteger[] factorial = new BigInteger[N+M+1];
+        factorial[0] = BigInteger.valueOf(1);
         for(int i=1; i<=N+M; i++){
-            factorial[i] = factorial[i-1]*i;
+            factorial[i] = factorial[i-1].multiply(BigInteger.valueOf(i));
         }
 
+
         if(K==0){
-            System.out.println(factorial[N+M-2]/factorial[N-1]/factorial[M-1]);
+
+            BigInteger answer = factorial[N+M-2].divide(factorial[N-1]).divide(factorial[M-1]);
+
+            System.out.println(answer);
         }else{
 
             //동그라미 위치
@@ -30,13 +36,13 @@ public class Main {
 
 
 
-            long first = factorial[r+c]/factorial[r]/factorial[c];
+            BigInteger first = (factorial[r+c].divide(factorial[r])).divide(factorial[c]);
 
-            long second = factorial[N+M-r-c-2]/factorial[N-r-1]/factorial[M-c-1];
+            BigInteger second = factorial[N+M-r-c-2].divide(factorial[N-r-1]).divide(factorial[M-c-1]);
 
 
 
-            System.out.println(first*second);
+            System.out.println(first.multiply(second));
 
         }
 
