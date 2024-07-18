@@ -1,28 +1,26 @@
 import sys
-from collections import deque
 
 input = sys.stdin.readline
 
-n = int(input())
-stack = deque()
+t = int(input())
 
-for _ in range(n):
-    order = input().rstrip()
-    
-    if('push' in order):
-        order, num = order.split()
-        stack.append(num)
-    
-    elif('pop' in order):
-        if(len(stack)==0): print(-1)
-        else: print(stack.pop())
-    elif(order == 'top'):
-        if(len(stack)==0): print(-1)
-        else: 
-            num = stack.pop()
-            stack.append(num)
-            print(num)
-    elif(order=='size'):
+stack = []
+for i in range(t):
+    order = list(input().split())
+
+    if(order[0]=='push'):
+        stack.append(order[1])
+    elif(order[0]=='pop'):
+        if(len(stack)>0):
+            print(stack.pop())
+        else: print(-1)
+    elif(order[0]=='top'):
+        if (len(stack) > 0):
+            print(stack[len(stack)-1])
+        else:
+            print(-1)
+    elif(order[0]=='size'):
         print(len(stack))
-    elif(order=='empty'):
-        print(1 if len(stack)==0 else 0)
+    else:
+        if(len(stack)==0): print(1)
+        else: print(0)
