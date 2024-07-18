@@ -3,26 +3,20 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-
-count = 0
-
-for _ in range(n):
+answer =0
+for i in range(n):
+    dic = dict()
     word = input().rstrip()
-
-    s = {}
-    length = len(word)
+    
     before = word[0]
-    s[word[0]] = 1
+    dic[before] = 1
     flag = True
-    for i in range(1,length):
-        if(before==word[i]): continue
-        if(s.get(word[i])!=None):
+    for j in range(1,len(word)):
+        if word[j] != word[j-1] and dic.get(word[j]) == 1:
             flag = False
             break
-    
-        before = word[i]
-        s[word[i]] = 1
-    if(flag):
-        count+=1
+        before=word[j]
+        dic[before] = 1
+    if(flag): answer += 1
 
-print(count)
+print(answer)
