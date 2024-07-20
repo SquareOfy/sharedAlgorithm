@@ -1,7 +1,7 @@
 import sys
 
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
+sys.setrecursionlimit(2503)
 
 d = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1,-1), (-1, 1), (1, -1), (1, 1))
 
