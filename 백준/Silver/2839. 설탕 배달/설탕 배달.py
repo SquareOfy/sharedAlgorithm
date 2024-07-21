@@ -1,16 +1,19 @@
-import sys
-n = int(sys.stdin.readline())
+n = int(input())
 
-if n%5 == 0:
-    num = n//5
-elif (n%5) != 0:
-    if (n%5) == 3:
-        num = (n//5) + (n%5)//3
-    elif n >5 and (n%5 ==1 or n%5 == 4):
-        num = (n//5) -1 + (n%5+5)//3
-    elif n >10 and n%5 == 2:
-        num = (n//5) -2 + (n%5 +10)//3
-    else:
-        num = -1
+dp = [5000]*(n+1)
 
-print(num)
+for i in range(min(6, n+1)):
+
+    if i%3 ==0 or i%5==0:
+        dp[i] = 1
+    else: dp[i] = 0
+
+for i in range(6,n+1):
+
+    if dp[i-5]!=0 and dp[i-5] != 5000:
+        dp[i] = min(dp[i], dp[i-5]+1)
+    if dp[i-3]!=0 and dp[i-3] != 5000:
+        dp[i] = min(dp[i], dp[i-3]+1)
+
+answer = dp[n] if dp[n]!=5000 and dp[n]!=0 else -1
+print(answer)
