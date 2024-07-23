@@ -15,19 +15,18 @@ def hanoi(i, start, end):
     if i == 0:
         return
     if i==1:
-        result.append([start, end])
+        print(start, end)
+        # result.append([start, end])
         return
     hanoi(i-1, start, get_stick(start,end))
-    result.append([start, end])
+    print(start, end)
     hanoi(i-1, get_stick(start,end), end)
 
 
 
-result = []
+print(2**k-1)
 hanoi(k, 1, 3)
-print(len(result))
-for i in result:
-    print(*i)
+
 
 
 
