@@ -1,21 +1,16 @@
-import sys
-
-input = sys.stdin.readline
+arr = [[0]*101 for _ in range(100)]
 
 n = int(input())
+papers = [list(map(int, input().split())) for _ in range(n)]
 
-paper = [[0]*100 for _ in range(100)]
+for a in papers:
+    for i in range(a[0], a[0]+10):
+        for j in range(a[1], a[1]+10):
+            arr[i][j] = 1
+answer =0
+for lst in arr:
+    for i in lst:
+        if i==1:
+            answer+=1
 
-
-result = 0
-
-for _ in range(n):
-    x, y = map(int, input().split())
-    # print(f"x: {x} / y: {y}")
-    for i in range(x, x+10):
-        for j in range(y, y+10):
-            if paper[i][j] == 0:
-                paper[i][j] = 1
-                result += 1
-
-print(result)
+print(answer)
