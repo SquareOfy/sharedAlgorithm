@@ -4,11 +4,15 @@
 
 ### 성능 요약
 
-메모리: 13060 KB, 시간: 124 ms
+메모리: 108080 KB, 시간: 112 ms
 
 ### 분류
 
-많은 조건 분기(case_work), 구현(implementation)
+많은 조건 분기, 구현
+
+### 제출 일자
+
+2024년 7월 24일 13:16:39
 
 ### 문제 설명
 
@@ -16,7 +20,7 @@
 
 <p>예를 들어 가로의 길이가 10, 세로의 길이가 5인 블록의 경계에 무인 경비를 의뢰한 3개의 상점이 있다고 하자. <그림 1>과 같이 이들은 1, 2, 3으로 표시되어 있고, 동근이는 X로 표시한 위치에 있다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/e89bf381-c913-4e99-b4b7-42bc4ba7c3ec/-/preview/" style="width: 274px; height: 163px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 274px; height: 163px;"></p>
 
 <p style="text-align: center;">< 그림 1 ></p>
 
