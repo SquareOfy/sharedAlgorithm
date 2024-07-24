@@ -1,7 +1,7 @@
-import sys
-A, B, V = map(int,sys.stdin.readline().split())
+a, b, v = map(int, input().split())
+answer = ((v-a) // (a-b))
 
-if (V-A)%(A-B) == 0:
-    print((V-A)//(A-B)+1)
-else: 
-    print((V-A)//(A-B)+2)
+answer += 1
+if (v-a) % (a-b) != 0:
+    answer += 1
+print(answer)
