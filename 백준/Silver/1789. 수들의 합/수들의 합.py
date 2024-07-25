@@ -1,15 +1,11 @@
-import sys
+s = int(input())
 
-input = sys.stdin.readline
+n = 1
 
-n = int(input())
-i = 1
-cnt = 0
-while(n>0):
-    if(n<i):
+while 1:
+    n_sum = n*(n+1)//2
+
+    if s >= n_sum and s - n_sum <= n:
         break
-    n-=i
-    cnt+=1
-    i+=1
-
-print(cnt)
+    n+=1
+print(n)
