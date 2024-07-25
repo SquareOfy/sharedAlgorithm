@@ -1,25 +1,11 @@
-import sys
-
-input = sys.stdin.readline
-
 n = int(input())
+people = [list(map(int, input().split()))+[i] for i in range(n)]
 
-people = []
-
-for _ in range(n):
-    man = list(map(int, input().split()))
-    people.append(man)
-
-result = [1]*n
-
+people.sort(key = lambda x : (x[0],x[1]), reverse=True)
+answer = [1]*n
 for i in range(n):
-    for j in range(i+1, n):
-        if(people[i][0]<people[j][0]):
-            if(people[i][1]<people[j][1]):
-                result[i]+=1
-        elif(people[i][0]>people[j][0]):
-            if(people[i][1]>people[j][1]):
-                result[j]+=1
+    for j in range(i):
+        if people[j][0] > people[i][0] and people[j][1] > people[i][1]:
+            answer[people[i][2]]+=1
 
-for num in result:
-    print(num, end = " ")
+print(*answer)
