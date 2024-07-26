@@ -1,12 +1,10 @@
-import sys
-
-input = sys.stdin.readline
-
-plates = list(input().rstrip())
+plates = input()
 
 h = 10
+
 for i in range(1, len(plates)):
-    if(plates[i-1]==plates[i]):
+    if plates[i] != plates[i-1]:
+        h+=10
+    else:
         h+=5
-    else: h+=10
 print(h)
