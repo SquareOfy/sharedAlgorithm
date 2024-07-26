@@ -10,8 +10,7 @@ answer = abs(n-now)
 if n== now:
     print(0)
 else:
-    last = '9'*(len(str(n))+1)
-    for i in range(int(last)):
+    for i in range(1000000):
         flag = True
         num = str(i)
         for k in lst:
