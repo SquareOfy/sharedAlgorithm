@@ -1,26 +1,24 @@
-n = int(input())
-m = int(input())
-
-edges = [[] for i in range(n+1)]
-virus = [0]*(n+1)
-
-for _ in range(m):
-    x, y = map(int, input().split())
-    edges[x].append(y)
-    edges[y].append(x)
-
-
-
+v = int(input())
+e = int(input())
+connected = [[] for i in range(v+1)]
 
 def dfs(i):
     global cnt
-    virus[i] = 1
+    visited[i] = 1
+    cnt += 1
 
-    for c in edges[i]:
-        if virus[c]==0:
-            dfs(c)
-            cnt+=1
-cnt = 0
+    for k in connected[i]:
+        if not visited[k]:
+            dfs(k)
+
+
+for i in range(e):
+    st, ed = map(int, input().split())
+    connected[st].append(ed)
+    connected[ed].append(st)
+
+visited = [0]*(v+1)
+cnt = -1
 dfs(1)
-
 print(cnt)
+
