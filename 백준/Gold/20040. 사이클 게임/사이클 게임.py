@@ -10,8 +10,10 @@ def union(x, y):
     b = find(y)
     if a < b:
         p[b] = a
-    else:
+    elif a > b:
         p[a] = b
+    else:
+        return 1
 
 def find(x):
     if x == p[x]:
@@ -22,9 +24,11 @@ answer =0
 
 for i in range(m):
     x, y = line_input[i]
-    if find(x) == find(y):
+    # if find(x) == find(y):
+    #     answer = i+1
+    #     break
+    if union(x, y):
         answer = i+1
         break
-    union(x, y)
 
 print(answer)
