@@ -59,4 +59,4 @@ for tc in range(1, t + 1):
 
     print(f"#{tc}", end=" ")
     for i in range(h):
-        print(*arr[i], sep="")
+        print(''.join(arr[i]))
