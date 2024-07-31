@@ -1,14 +1,13 @@
 n = int(input())
-lst = map(int, input().split())
-lst2 = list(enumerate(lst))
-lst2.sort(key = lambda x : x[1])
+lst = list(map(int, input().split()))
 
-answer = [0] * n
-for i in range(1, n):
-    if lst2[i][1] != lst2[i-1][1]:
-        answer[lst2[i][0]] = answer[lst2[i-1][0]]+1
-    else:
-        answer[lst2[i][0]] = answer[lst2[i-1][0]]
 
+numbers = set(lst)
+numbers = sorted(numbers)
+dict_num = dict({numbers[i] : i for i in range(len(numbers))})
+answer = []
+for i in lst:
+    answer.append(dict_num[i])
 
 print(*answer)
+
