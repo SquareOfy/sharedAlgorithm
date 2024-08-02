@@ -1,43 +1,32 @@
 from collections import deque
+
 n, k = map(int, input().split())
+max_len = 100001
 
-
-
-if n>=k:
-    print(n-k)
+if n > k:
+    print(n - k)
     print(1)
 else:
-    answer_cnt = 0
-    answer = 100002
-    visited = [100002] * 100001
-    visited[n] = 1
-    q = deque([[n, 0]])
+    q = deque([n])
+    time_visited = [0] * max_len
+    cnt_visited = [0] * max_len
+    time_visited[n] = 1
+    cnt_visited[n] = 1
+
     while q:
         now = q.popleft()
-        rank = now[1]
-        if now[0] == k:
-            if answer > rank:
-                answer = rank
-                answer_cnt = 1
-            elif answer == rank:
-                answer_cnt += 1
+
+        if now == k:
             continue
 
-        jump = now[0]*2
-        plus = now[0] +1
-        minus = now[0]-1
+        for t in (now * 2, now + 1, now - 1):
+            if 0 <= t < max_len:
+                if not time_visited[t]:
+                    q.append(t)
+                    time_visited[t] = time_visited[now] + 1
+                    cnt_visited[t] = cnt_visited[now]
+                elif time_visited[t] == time_visited[now]+1:
+                    cnt_visited[t] += cnt_visited[now]
 
-        if jump <100001:
-            if jump==k or visited[jump] >=rank+1:
-                visited[jump] = rank+1
-                q.append([jump, rank+1])
-        if plus <100001:
-            if plus == k or  visited[plus]>=rank+1:
-                visited[plus] = rank+1
-                q.append([plus, rank+1])
-        if minus>=0:
-            if minus == k or  visited[minus]>=rank+1:
-                visited[minus] = rank+1
-                q.append([minus, rank+1])
-    print(answer)
-    print(answer_cnt)
+    print(time_visited[k]-1)
+    print(cnt_visited[k])
