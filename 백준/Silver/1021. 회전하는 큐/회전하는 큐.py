@@ -5,16 +5,16 @@ lst = list(map(int, input().split()))
 answer = 0
 
 for i in lst:
-    tmp_lst = list(dq)
-    l = tmp_lst.index(i)
+    tmp_lst = list(dq) #index함수 사용하기 위해서 list로 변환
+    l = tmp_lst.index(i) 
 
-    if tmp_lst.index(i) < len(tmp_lst) - l:
-        for k in range(l):
-            dq.rotate(-1)
+    if l < len(tmp_lst) - l: #양 끝 중 어디서 더 가까운지 판단
+        for k in range(l): #앞쪽이 가까우므로 그 index만큼
+            dq.rotate(-1) #왼쪽으로 이동
             answer += 1
     else:
         for k in range(len(tmp_lst)-l):
-            dq.rotate()
+            dq.rotate() #오른쪽으로 이동
             answer+=1
-    dq.popleft()
+    dq.popleft() #숫자 빼내기
 print(answer)
