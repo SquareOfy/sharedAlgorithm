@@ -2,25 +2,18 @@ n, l, r, x = map(int, input().split())
 lst = list(map(int, input().split()))
 
 
-def select(cnt, k, idx):
+def dfs(level, selected):
     global answer
-    if cnt == k:
-        if l<=sum(selected)<=r and max(selected) - min(selected) >=x:
-            answer+=1
+    if level == n:
+        if len(selected)<=1:
+            return
+        if l <= sum(selected) <= r and max(selected) - min(selected) >= x:
+            answer += 1
         return
-
-    for j in range(idx, n):
-        if not visited[j]:
-            visited[j] = 1
-            selected.append(lst[j])
-            select(cnt + 1, k, j + 1)
-            selected.pop()
-            visited[j] = 0
+    dfs(level + 1, selected + [lst[level]])
+    dfs(level + 1, selected)
 
 
-selected = []
-visited = [0] * n
-answer =0
-for i in range(2, n + 1):
-    select(0, i, 0)
+answer = 0
+dfs(0, [])
 print(answer)
