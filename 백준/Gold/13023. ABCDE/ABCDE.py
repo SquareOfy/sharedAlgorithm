@@ -23,11 +23,12 @@ def dfs(node, cnt):
         dfs(f, cnt+1)
         visited[f] = 0
 
+visited = [0] * (n + 1)
 for i in range(n):
     if answer:
         continue
-    visited = [0] * (n + 1)
     visited[i] = 1
     dfs(i, 0)
+    visited[i] = 0
 print(answer)
 
