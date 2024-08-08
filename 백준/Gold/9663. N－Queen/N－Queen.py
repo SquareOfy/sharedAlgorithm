@@ -7,13 +7,11 @@
 #퀸이 놓인 행번호를 visited의 값으로 넣으면 굳이 2차원이 아니어도 체크 가능
 n = int(input())
 visited = [-2]*n
-used_queen = [0]*n
 answer =0
 
 def dfs(cnt):
     global answer
     if cnt ==n:
-        # print(visited)
         answer +=1
         return
     for i in range(n):
@@ -21,7 +19,7 @@ def dfs(cnt):
             continue
         flag = True
 
-        for k in range(1, n):
+        for k in range(1, max(n-1-i, i)+1):
             #우상체크
             if i+k < n and cnt+k<n and visited[i+k] == cnt+k:
                 flag=False
