@@ -8,11 +8,6 @@ visited = [[0]*n for _ in range(n)]
 answer = 0
 
 def is_possible(r, c):
-    #가로, 세로 x로 바꾸기
-    for i in range(n):
-        if visited[r][i]==2 or visited[i][c]==2:
-            return False
-
     for d in (-1, -1), (1, 1), (-1, 1), (1, -1):
         du = r+d[0]
         dv = c+d[1]
