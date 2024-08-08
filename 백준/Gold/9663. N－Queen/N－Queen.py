@@ -1,51 +1,48 @@
+#퀸 놓을 자리를 각 행마다 어떤 열에 놓을지 정하기
+#퀸을 놓기 전에 대각선에 퀸이 있는지 확인하고 없다면 퀸 놓고
+#다음 행에 퀸 놓을 열 번호 구하러 다음 함수 호출하는 방식으로 구현할 것
+#이 때, 퀸을 놓을 수 있는지 확인하기 위해
+#2차원배열이 아닌 1차원 배열 활용해보자
+#어차피 순열로 퀸이 놓일 자리를 구하므로 가로, 세로는 겹칠 일이 없음
+#퀸이 놓인 행번호를 visited의 값으로 넣으면 굳이 2차원이 아니어도 체크 가능
 n = int(input())
-#각 row에 퀸을 놓은 열번호 사용 여부
+visited = [-2]*n
 used_queen = [0]*n
-
-#퀸 놓을 때마다 공격 범위 체크하여, 다음 퀸 놓을 때
-#놓을 수 있는지 확인하기 위한 배열
-visited = [[0]*n for _ in range(n)]
-answer = 0
-
-def is_possible(r, c):
-    for d in (-1, -1), (1, 1), (-1, 1), (1, -1):
-        du = r+d[0]
-        dv = c+d[1]
-        while 0<=du<n and 0<=dv<n:
-            if visited[du][dv]:
-                return False
-            du += d[0]
-            dv += d[1]
-    return True
-
+answer =0
 
 def dfs(cnt):
     global answer
-    if cnt == n:
-        answer+=1
+    if cnt ==n:
+        # print(visited)
+        answer +=1
         return
-
-    for i in range(n):#열 번호
-        if used_queen[i]:
+    for i in range(n):
+        if visited[i] != -2:
             continue
+        flag = True
 
-        #(cnt, i)에 퀸을 놓을 때 공격범위인
-        #가로, 세로, 좌대각 우대각에 visited가 1인 지점 있는지 체크
-        #가로와 세로는 당연히 없을 것이므로 대각만 체크해도 됨
-        if is_possible(cnt, i):
-            #visited 1인 곳 없으면 퀸 놓고 used[i]체크하고 다음 함수 호출
-            used_queen[i] = 1
-            visited[cnt][i] = 1
+        for k in range(1, n):
+            #우상체크
+            if i+k < n and cnt+k<n and visited[i+k] == cnt+k:
+                flag=False
+                break
+            #좌하체크
+            if i-k>=0 and cnt-k>=0 and visited[i-k] == cnt-k:
+                flag=False
+                break
+            #우하체크
+            if i + k < n and cnt - k >= 0 and visited[i + k] == cnt - k:
+                flag = False
+                break
+            #좌상체크
+            if i - k >= 0 and cnt + k < n and visited[i - k] == cnt + k:
+                flag = False
+                break
+        if flag:
+            visited[i] = cnt
             dfs(cnt+1)
-            # 함수 종료 후 visited원상복구하기 used[i]도
-            used_queen[i] = 0
-            visited[cnt][i] = 0
-
-        else:
-            # 있으면 continue
-            continue
+            visited[i] = -2
 
 
 dfs(0)
 print(answer)
-
