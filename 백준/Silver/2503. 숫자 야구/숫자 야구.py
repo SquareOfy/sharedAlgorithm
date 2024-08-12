@@ -1,27 +1,28 @@
-n = int(input())
-arr = [list(map(int, input().split())) for i in range(n)]
-answer = 0
-for a in range(1, 10):
-    for b in range(1, 10):
-        for c in range(1, 10):
-            if a == b or b == c or c == a:
-                continue
-            num = "{0}{1}{2}".format(str(a), str(b), str(c))
-            cnt = 0
-            for lst in arr:
-                call = str(lst[0])
-                strike = 0
-                ball = 0
-                for j in range(3):
-                    if num[j] in call:
-                        idx = call.index(num[j])
-                        if idx == j:
-                            strike += 1
-                        else:
-                            ball += 1
-                if strike == lst[1] and ball == lst[2]:
-                    cnt += 1
-            if cnt == len(arr):
-                answer += 1
+def check_num(num):
+    for r in range(n):
+        called_num = str(arr[r][0])
+        strike = 0
+        ball = 0
+        for x in range(3):
+            if called_num[x] == num[x]:
+                strike+=1
+            elif called_num[x] in num:
+                ball+=1
+        if strike != arr[r][1] or ball != arr[r][2]:
+            return False
+    return True
 
+n = int(input())
+
+arr = [list(map(int, input().split())) for _ in range(n)]
+answer = 0
+for i in range(1, 10):
+    for j in range(1, 10):
+        for k in range(1, 10):
+            if i==j or i==k or j==k:
+                continue
+            str_num= str(i)+str(j)+str(k)
+            result = check_num(str_num)
+            if result:
+                answer += 1
 print(answer)
