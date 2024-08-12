@@ -1,37 +1,22 @@
-k = int(input())
-
-
-def get_stick(i, j):
-    if 1 not in (i, j):
-        return 1
-    if 2 not in (i, j):
+def get_idx(start, end):
+    if (start, end) in ((1, 3), (3, 1)):
         return 2
-    if 3 not in (i, j):
+    if (start, end) in ((1, 2), (2, 1)):
         return 3
+    if (start, end) in ((2, 3), (3, 2)):
+        return 1
 
 
-def hanoi(i, start, end):
-
-    if i == 0:
-        return
-    if i==1:
+def hanoi(start, end, k):
+    if k == 1:
         print(start, end)
-        # result.append([start, end])
         return
-    hanoi(i-1, start, get_stick(start,end))
-    print(start, end)
-    hanoi(i-1, get_stick(start,end), end)
+    mid = get_idx(start, end)
+    hanoi(start, mid, k-1)
+    hanoi(start, end, 1)
+    hanoi(mid, end, k-1)
 
 
-
-print(2**k-1)
-hanoi(k, 1, 3)
-
-
-
-
-
-
-
-
-
+n = int(input())
+print(2**n-1)
+hanoi(1, 3, n)
