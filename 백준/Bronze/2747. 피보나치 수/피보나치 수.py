@@ -1,10 +1,13 @@
+def fibo(k):
+    if k==0:
+        return 0
+    if fibo_lst[k] != 0:
+        return fibo_lst[k]
+    
+    fibo_lst[k] =  fibo(k-1)+fibo(k-2)
+    return fibo_lst[k]
+
 n = int(input())
-dp = [0]*(n+1)
-
-if n>=1:
-    dp[1] = 1
-
-for i in range(2, n+1):
-    dp[i] = (dp[i-1]+dp[i-2])
-
-print(dp[n])
+fibo_lst = [0]*(n+1)
+fibo_lst[1] = 1
+print(fibo(n))
