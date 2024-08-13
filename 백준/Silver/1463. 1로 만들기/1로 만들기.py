@@ -1,21 +1,18 @@
+
 n = int(input())
+# 절대 answer가 될 수 없는 최댓값으로 설정
+# 계속 1씩 빼서 1이 됐을 때의 값보다 크게 설정
+# dp = [ n for _ in range(n + 1)]
 
-dp = [[1000000]*(3) for i in range(n+1)]
+dp = [[n] * 3 for i in range(n+1)]
+for i in range(3):
+    dp[n][i] = 0
 
-if n >= 2:
-    dp[2][1] = 1
-    dp[2][1] = 1
-if n >= 3:
-    dp[3][0] = 1
-
-if n>4:
-    for i in range(4, n+1):
-        if i%3 == 0:
-            dp[i][0] = min(dp[i//3])+1
-        if i%2 == 0:
-            dp[i][1] = min(dp[i//2])+1
-        dp[i][2] = min(dp[i-1]) +1
-if n>1:
-    print(min(dp[n]))
-else:
-    print(0)
+for i in range(n, 1, -1):
+    cnt = min(dp[i])
+    if i%3 == 0:
+        dp[i//3][2] = min(dp[i//3][2], cnt+1)
+    if i%2 ==0:
+        dp[i//2][1] = min(dp[i//2][1], cnt+1)
+    dp[i-1][0] = min(dp[i-1][0], cnt+1)
+print(min(dp[1]))
