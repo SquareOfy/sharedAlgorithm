@@ -1,33 +1,22 @@
+def check(mid):
+    tree_sum = 0
+    for h in lst:
+        if h>mid:
+            tree_sum += h-mid
+    if tree_sum >= m:
+        return True
+    return False
 n, m = map(int, input().split())
-
 lst = list(map(int, input().split()))
 
-def calculate_tree(mid):
-    result = 0
-
-    for i in lst:
-        if i>mid:
-            result+= i-mid
-
-    return result
-
-
-left = 0
-right = max(lst)
-answer = right
-while left < right:
-
-    mid = (left+right)//2
-
-    result = calculate_tree(mid)
-
-    if result < m:
-        right = mid
-
-    else:
-        left = mid + 1
+st = 0
+ed = max(lst)
+answer = 0
+while st<=ed:
+    mid = (st+ed)//2
+    if check(mid):
         answer = mid
-
-
+        st = mid+1
+    else:
+        ed = mid-1
 print(answer)
-
