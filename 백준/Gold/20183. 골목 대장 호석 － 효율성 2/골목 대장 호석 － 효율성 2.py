@@ -23,12 +23,10 @@ def dijkstra(s, e, c):
                 if next_cost > c:
                     continue
                 dist[next_node] = cur_cost+ next_cost
-                if next_node == e:
-                    m_cost = max(cur_max, next_cost)
                 heapq.heappush(pq, (dist[next_node], next_node, max(next_cost, cur_max)))
     # print("다익스트라 result")
     # print("최대 : ", m_cost, "비용 :",  dist[e])
-    return dist[e], m_cost
+    return dist[e]
     # if m_cost > cost:
     #     return dist[e], m_cost
     # else:
@@ -45,8 +43,9 @@ for i in range(M):
     st, ed, cost = map(int, input().split())
     edges[st].append((cost, ed))
     edges[ed].append((cost, st))
-    heapq.heappush(edge_pq, (cost, st, ed))
-
+    edge_pq.append((cost, st, ed))
+    # heapq.heappush(edge_pq, (cost, st, ed))
+edge_pq.sort()
 inf = 500_000*10**9
 answer = inf
 max_cost = 0
@@ -67,42 +66,21 @@ while left <= right:
 
     cost, st, ed = edge_pq[mid]
     # print(cost, st, ed)
-    m_cost = -1
-    d = 0
-    d, m_cost = dijkstra(S, E, cost)
-    # if st == S and ed == E:
-    #     d, m_cost = dijkstra(S, E, cost)
-    #
-    # else:
-    #     # S -> st 로 가는 최소비용 다익스트라로 구하기
-    #     a, cost_a= dijkstra(S, st, cost)
-    #     #st에서 E로 가는 최소비용 다익스트라로 구하기
-    #     b, cost_b = dijkstra(ed, E, cost)
-    #     m_cost = max(cost_a, cost_b)
-    #     d = (a+b)
+    # m_cost = -1
+    d = dijkstra(S, E, cost)
 
-
-    # print(m_cost)
-    # print(d)
     # 나보다 더 큰놈을 지나왔어 ! 그럼 더 큰놈을 지나칠 수밖에 없는 간선이었다는 뜻
     # C보다 더 돈이 많이 드는 길이다! 전체 비용을 줄이려면 수치심을 더 받는 것을 감수해야한다
     # 더 큰 놈 찾으러 가기
-    if m_cost > cost or d>C:
+    if d>C:
         left = mid+1
+        # print("왼쪽 조정")
         # print("여기")
     #내가 제일 큰 간선이었다면?
     #더 작은 수치심을 느낄 수 있는 길을 찾아봐야한다...!
     else:
         right = mid-1
-        answer = min(m_cost, answer)
-    # if d<=C:
-    #     answer = min(m_cost, answer)
-
-    # if d > C:
-    #     left = mid + 1
-    # else:
-    #     if result:
-    #         answer = cost
-    #     right = mid-1
+        answer = min(cost, answer)
+        # print("오른쪽 조정")
 
 print(answer if answer!=inf else -1)
