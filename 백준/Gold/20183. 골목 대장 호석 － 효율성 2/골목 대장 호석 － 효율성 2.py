@@ -1,8 +1,10 @@
 import heapq
 def dijkstra(s, e, c):
+    # print("다익스트라")
+    # print(s, e, c)
 
     if s==e:
-        return 1, 0
+        return 0, 0
 
     pq = [(0, s, 0)]
     dist = [inf] * (N + 1)
@@ -18,18 +20,19 @@ def dijkstra(s, e, c):
         for edge in edges[cur_node]:
             next_cost, next_node = edge
             if dist[next_node] > cur_cost + next_cost:
-                if next_cost > cost:
+                if next_cost > c:
                     continue
                 dist[next_node] = cur_cost+ next_cost
-                # m_cost[next_node] = max(m_cost[next_node], next_cost)
                 if next_node == e:
                     m_cost = max(cur_max, next_cost)
                 heapq.heappush(pq, (dist[next_node], next_node, max(next_cost, cur_max)))
-    if m_cost > c:
-
-        return 0, dist[e]
-    else:
-        return 1, dist[e]
+    # print("다익스트라 result")
+    # print("최대 : ", m_cost, "비용 :",  dist[e])
+    return dist[e], m_cost
+    # if m_cost > cost:
+    #     return dist[e], m_cost
+    # else:
+    #     return dist[e], m_cost
     # else:
     #     return 0, C+1
 
@@ -63,24 +66,37 @@ while left <= right:
     mid = (left+right)//2
 
     cost, st, ed = edge_pq[mid]
-    result = -1
+    # print(cost, st, ed)
+    m_cost = -1
     d = 0
-    if st == S and ed == E:
-        result, d = dijkstra(S, E, cost)
-    else:
-        # S -> st 로 가는 최소비용 다익스트라로 구하기
-        result_a, a= dijkstra(S, st, cost)
-        #st에서 E로 가는 최소비용 다익스트라로 구하기
-        result_b, b = dijkstra(st, E, cost)
-        result = result_a and result_b
-        d = (a+b)
-    if not result or d>C:
+    d, m_cost = dijkstra(S, E, cost)
+    # if st == S and ed == E:
+    #     d, m_cost = dijkstra(S, E, cost)
+    #
+    # else:
+    #     # S -> st 로 가는 최소비용 다익스트라로 구하기
+    #     a, cost_a= dijkstra(S, st, cost)
+    #     #st에서 E로 가는 최소비용 다익스트라로 구하기
+    #     b, cost_b = dijkstra(ed, E, cost)
+    #     m_cost = max(cost_a, cost_b)
+    #     d = (a+b)
+
+
+    # print(m_cost)
+    # print(d)
+    # 나보다 더 큰놈을 지나왔어 ! 그럼 더 큰놈을 지나칠 수밖에 없는 간선이었다는 뜻
+    # C보다 더 돈이 많이 드는 길이다! 전체 비용을 줄이려면 수치심을 더 받는 것을 감수해야한다
+    # 더 큰 놈 찾으러 가기
+    if m_cost > cost or d>C:
         left = mid+1
+        # print("여기")
+    #내가 제일 큰 간선이었다면?
+    #더 작은 수치심을 느낄 수 있는 길을 찾아봐야한다...!
     else:
         right = mid-1
-        if d<=C:
-            answer = min(cost, answer)
-
+        answer = min(m_cost, answer)
+    # if d<=C:
+    #     answer = min(m_cost, answer)
 
     # if d > C:
     #     left = mid + 1
