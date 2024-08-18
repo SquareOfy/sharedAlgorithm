@@ -10,6 +10,7 @@ def bfs(s):
         cur, rank = q.popleft()
         if rank == K:
             answer.append(cur)
+            continue
         for e in edges[cur]:
             # visited체크하고 q에 다음 연결된 노드 넣기(거리 +1)
             if not visited[e]:
