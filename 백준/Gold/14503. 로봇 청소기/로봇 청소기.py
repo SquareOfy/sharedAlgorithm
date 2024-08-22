@@ -1,72 +1,83 @@
-import sys
+"""
+문제읽기 3시 16분 ~ 20분
+구상 20분 ~23분
+구현시작 23분 ~32분 구현 완료
 
-input = sys.stdin.readline
+엉망진창 테케 결과로 디버깅 시작
+33분 ~
+answer 더해지는 부분부터 체크해봐야겠다
+arr 값 잘못 이해했음 발견 ... 49분;;
+arr 조건과 로봇 청소기 초기위치의 청소상태 헷갈려서 디버깅,, 54분 풀이 종료
 
-dr = [-1, 0, 1, 0]
-dc = [0, -1, 0, 1]
-findD = [0, 3, 2, 1]
-cnt = 0
 
+==================================구상 ===========================
+인덱스 0부터 시작
+모두 청소 안된상태 ( visited 0으로 )
+현재 칸 청소
+현재 칸에서 사방 탐색해서 청소되지 않은 빈칸 여부 체크하기
+빈칸 없다?
+    바라보는 방향(d) 유지한체 후진하고 다시 사방탐색 반복
+    벽이면 작동 멈추기(break)
+
+빈칸 있다 ? 반시계 회전 (direction : 상 좌 하 우 로 만들고 +1 module)
+앞에 빈칸이면 전진 아니면 회전
+"""
+def need_clean():
+    for di, dj in directions:
+        du = r+di
+        dv = c+dj
+        if obb(du, dv):
+            return False
+        if arr[du][dv] == 0:
+            return True
+    return False
+def obb(du, dv):
+    if du < 0 or dv < 0 or du >= n or dv >= m:
+        return True
+    return False
+#input 받기
 n, m = map(int, input().split())
-
-room = []
-visited = [[False]*m for _ in range(n)]
-
 r, c, d = map(int, input().split())
-d = findD[d]
 
-for i in range(n):
-    row = list(map(int, input().split()))
-    room.append(row)
+#d : 0 - 북(상)/ 1 - 동(우) /2- 남(하)  / 3(좌)
+#arr배열 입력받기 => visited로 함께 활용할 것
+arr = [list(map(int, input().split())) for _ in range(n)]
+#direction 상우하좌로 준비 반시계 회전하려면 +3 mod
+directions = (-1, 0), (0, 1),  (1, 0),(0, -1)
+answer = 0
+#while 문
+while 1:
+    if arr[r][c] == 0:
+        arr[r][c] = 2
+        answer+=1
 
-
-
-class Node:
-
-    def __init__(self, r, c, d):
-        self.r = r
-        self.c = c
-        self.d = d
-
-
-
-def clean(r, c):
-    flag = False
-    for i in range(4):
-        du = r+dr[i]
-        dv = c+dc[i]
-        if(du<0 or dv<0 or du>=n or dv>=m): continue
-        if(room[du][dv]==0 and (not visited[du][dv])):
-            flag = True
+    #현재칸 청소
+    #사방탐색 청소된칸 여부 확인 (함수화)
+    result = need_clean()
+    #없으면 후진 후 continue
+    if not result:
+        du = r- directions[d][0]
+        dv = c- directions[d][1]
+        if obb(du, dv) or arr[du][dv]==1:
             break
-    
-    if(flag):
-        while(True):
-            global d
-            d = (d+1)%4
-            du = r + dr[d]
-            dv = c + dc[d]
-            if(du<0 or dv<0 or du>=n or dv>=m or room[du][dv]==1):
-                continue
-            if(not visited[du][dv]):
-                visited[du][dv] = True
-                global cnt
-                cnt+=1
-                clean(du, dv)
-                break
-    else:
-        dir = (d+2)%4
-        du = r+dr[dir]
-        dv = c+dc[dir]
-        if(du<0 or dv<0 or du>=n or dv>=m or room[du][dv]==1):
-            return
-        clean(du, dv)
+        r = du
+        c = dv
+        continue
+
+    #있으면 반시계회전 for문.
+    #청소안된 곳이면 전진 후 break
+
+    for i in range(4):
+        d = (d + 3) % 4
+        du = r+ directions[d][0]
+        dv = c+ directions[d][1]
+        if obb(du, dv) or arr[du][dv] == 1:
+            continue
+        #전진 후 청소
+        if arr[du][dv] == 0:
+            r = du
+            c = dv
+            break
 
 
-if(room[r][c]==0):
-    visited[r][c] = True
-    cnt+=1
-
-clean(r,c)
-
-print(cnt)
+print(answer)
