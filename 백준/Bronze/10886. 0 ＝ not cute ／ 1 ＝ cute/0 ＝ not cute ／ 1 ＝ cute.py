@@ -1,14 +1,6 @@
-import sys
-
-input = sys.stdin.readline
-
 n = int(input())
-
-cute = 0
+cnt = 0
 for i in range(n):
-    a = int(input())
-    if(a==1): cute+=1
-
-if(cute>n-cute):
-    print('Junhee is cute!')
-else: print('Junhee is not cute!')
+    s = int(input())
+    cnt+=s
+print("Junhee is not cute!" if n-cnt>cnt else "Junhee is cute!")
