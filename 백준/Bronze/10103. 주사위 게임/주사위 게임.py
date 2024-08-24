@@ -1,14 +1,10 @@
 n = int(input())
-chang  = 100
-sang = 100
+c, s = 100, 100
 for i in range(n):
-    c, s = map(int, input().split())
-    if c==s:
-        continue
-    elif c<s:
-        chang -= s
-    else:
-        sang -= c
-
-print(chang)
-print(sang)
+    a, b = map(int, input().split())
+    if a < b:
+        c-= b
+    elif a>b:
+        s -= a
+print(c)
+print(s)
