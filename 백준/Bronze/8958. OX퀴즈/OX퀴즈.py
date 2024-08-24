@@ -1,14 +1,12 @@
 n = int(input())
-
 for i in range(n):
-    quiz = input()
-    cnt = 0
+    cnt = 1
+    ans = input()
     score = 0
-    for j in quiz:
-        if j == 'O':
-            cnt += 1
+    for j in range(len(ans)):
+        if ans[j]=='O':
             score+= cnt
+            cnt+=1
         else:
-            cnt = 0
-        
+            cnt=1
     print(score)
