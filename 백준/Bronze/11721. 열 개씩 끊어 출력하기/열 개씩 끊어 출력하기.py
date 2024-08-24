@@ -1,9 +1,4 @@
 word = input()
 
-n = len(word)
-
-for i in range(n//10):
-    print(word[i*10:(i+1)*10])
-
-if n % 10 != 0:
-    print(word[10*(n//10):])
+for i in range(0, len(word), 10):
+    print(word[i:min(i + 10, len(word))])
