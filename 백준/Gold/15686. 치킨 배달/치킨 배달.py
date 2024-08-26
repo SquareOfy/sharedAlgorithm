@@ -35,25 +35,20 @@ def pick_hospitals(level, idx):
     #종료 조건 : m개 다 고르면 고른 병원들로 사람들 사이의 최단 병원거리 갱신
     if level == m:
         tmp = 0
-        dist = [[inf] * n for _ in range(n)]
+        for p in people:
+            d = inf
+            for h in selected:
+                d = min(get_distance(p, h), d)
+            tmp += d
+        answer = min(tmp, answer)
 
-        #거리 재기. 더 빠른 방법은?
-        for h in selected:
-            for p in people:
-                dist[p[0]][p[1]] = min(get_distance(h, p), dist[p[0]][p[1]])
-        for i in range(n):
-            for j in range(n):
-                if dist[i][j] != inf:
-                    tmp+= dist[i][j]
         answer = min(answer, tmp)
         return
 
     for i in range(idx, k):
         h = hospitals[i]
         selected[level] = h
-        # arr[h[0]][h[1]] = -2
         pick_hospitals(level+1, i+1)
-        # arr[h[0]][h[1]] = 2
 
 
 def get_distance(a,b):
