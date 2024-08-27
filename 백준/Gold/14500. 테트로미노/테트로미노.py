@@ -17,51 +17,12 @@ bfs로 했을 때 겹치는 모양이 없을지 고려해볼것. 있겠군. 하�
 
 
 """
-
-
-# from collections import deque
-# def bfs(r, c):
-#     global answer
-#     q = deque([(r, c, 1, arr[r][c])])
-#     visited = [[0] * m for _ in range(n)]
-#     visited[r][c] = 1
-#     # sm_v = [[0] * m for _ in range(n)]
-#     # sm_v[r][c] = arr[r][c]
-#     while q:
-#         i, j, rank, sm = q.popleft()
-#         if rank==3:
-#             #갱신
-#             for di, dj in (-1, 0), (0, -1), (1, 0), (0, 1):
-#                 du = r + di
-#                 dv = c + dj
-#                 if du < 0 or dv < 0 or du >= n or dv >= m:
-#                     continue
-#                 if not visited[du][dv] or visited[du][dv]==rank:
-#                     visited[du][dv] = rank
-#                     answer = max(answer, sm+arr[du][dv])
-#             continue
-#             # answer = max(answer, sm)
-#             continue
-#         for di, dj in (0, -1), (1, 0), (0, 1):
-#             du = i+di
-#             dv = j+dj
-#             if du<0 or dv<0 or du>=n or dv>=m:
-#                 continue
-#             if visited[du][dv] < rank:
-#                 continue
-#             if not visited[du][dv] or visited[du][dv]==rank:
-#                 visited[du][dv] = rank
-#                 q.append((du, dv, rank+1, sm+arr[du][dv]))
 import sys
-sys.setrecursionlimit(100000)
 def dfs(level, sm, r, c):
     global answer
 
     if level == 4:
         answer = max(answer, sm)
-        # for i in range(n):
-        #     print(visited[i])
-        # print()
         return
     for di, dj in (-1, 0), (0, -1), (1, 0), (0, 1):
         du = r + di
@@ -81,18 +42,11 @@ answer = 0
 visited = [[0] * m for _ in range(n)]
 for i in range(n):
     for j in range(m):
-        if visited[i][j]:
-            continue
         visited[i][j] = 1
         dfs(1, arr[i][j], i, j)
         visited[i][j] = 0
-
-    # bfs(i, j)
-
-# ㅏ ㅓ ㅗ ㅜ 체크
-# 가운데 갈림길인 부분을 기점으로 보겟음
-for i in range(n):
-    for j in range(m):
+        # ㅏ ㅓ ㅗ ㅜ 체크
+        # 가운데 갈림길인 부분을 기점으로 보겟음
         s = arr[i][j]
         # ㅏ / ㅓ
         if i + 1 < n and i - 1 >= 0 and j - 1 >= 0:  # ㅓ
@@ -103,6 +57,8 @@ for i in range(n):
             answer = max(answer, s + arr[i][j + 1] + arr[i][j - 1] + arr[i - 1][j])
         if j + 1 < m and j - 1 >= 0 and i + 1 < n:  # ㅗ
             answer = max(answer, s + arr[i][j + 1] + arr[i][j - 1] + arr[i + 1][j])
-        # if i + 1 < n and j + 1 < m:
-        #     answer = max(answer, s + arr[i + 1][j] + arr[i][j + 1] + arr[i + 1][j + 1])
+
+
+
+
 print(answer)
