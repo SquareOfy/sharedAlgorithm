@@ -1,86 +1,64 @@
-"""
-구상
-# 3*3*[] 3차원 배열 준비
-# 숫자 => 배열 좌표로 변환하는 룩업테이블 준비
+L = int(input())
+password = list(map(int, input().split()))
+visited = [False] * 10
 
-# lst를 돌며 그 숫자가 있는 좌표에 어떤 방향으로 왔는지 []에 있는지 체크 후 append
-# 만약 그 방향이 lst에 이미 있다면 불가능
+# 각 인덱스에서 가지 못하는 칸
+c_nums = [
+    [],
+    [3, 7, 9],
+    [8],
+    [1, 7, 9],
+    [6],
+    [],
+    [4],
+    [1, 3, 9],
+    [2],
+    [1, 3, 7]
+]
 
-# 방향은 어떻게 찾지?
+# 위 칸을 지나가려고 할 때 가운데에 끼는 숫자들
+barrier = [
+    [],
+    [2, 4, 5],
+    [5],
+    [2, 5, 6],
+    [5],
+    [],
+    [5],
+    [4, 5, 8],
+    [5],
+    [5, 6, 8]
+]
 
+visited[password[0]] = True
+idx = 1
 
-# 이번 숫자의 좌표와 이전 숫자의 좌표 구하고 거리가 taxi dist만큼 for문을 돌며
-#  그 방향으로 가면서 [] 에 있으면 불가능 없으면 넣고 다음 인덱스
+flag = True
+while True:
+    if idx == len(password):
+        break
 
-# 방향으로 가는 거 어떻게 표현?
-# dist = 택시 거리
-# 좌표 차이 (a, b) 이면  a//(abs(a)) , b//(abs(b))를 방향벡터로 쓰기
-==============================
-구현 완료 후 빈틈 발견
+    # 입력받은 패스워드 중 현재의 인덱스 값이 이전 번호의 c_nums에 있다면 갈 수 없는 넘버에 해당함
+    if password[idx] in c_nums[password[idx-1]]:
+        for j in range(len(c_nums[password[idx-1]])):
+            # 근데 다 못가는 건 아니고 그 중간 barrier에 해당하는 값을 이미 방문했다면 지나칠 수 있으니까
+            # 지나쳤는지 visited를 확인하는 코드
+            if password[idx] == c_nums[password[idx-1]][j]:  # 이건 해당하는 barrier 값 찾기 위한 if 문
+                if visited[barrier[password[idx-1]][j]]: break  # 만약에 이전에 방문했으면 지나갈 수 있으니까 나가고
+                flag = False  # 아니라면 flag 바꿔줌
+                break
 
-1 -> 6으로 가는 경우는 우쨔냐????  그냥 가지려나?
-안된다 ;;
+    # 위의 if문과 별개로 현재 위치가 이미 이전에 방문한 적이 있다면 못 지나감
+    if visited[password[idx]]:
+        flag = False
+        break
 
-"""
-def check():
-    global answer
-    for i in range(1, N):
-        bf = point_dict[lst[i-1]]
-        cur = point_dict[lst[i]]
-        d = [cur[0] - bf[0], cur[1] - bf[1]]
+    if not flag: break
 
-        dist = max(abs(d[0]), abs(d[1]))
-        if dist == 0:
-            answer = "NO"
-            return
-        #둘 중 하나라도 0이면
-        if d[0]==0 or d[1]==0:
-            d = [d[0] // abs(d[0]) if d[0]!=0 else 0, d[1] // abs(d[1]) if d[1]!=0 else 0]
-        else: #둘다 0이 아니면
-            dist = (abs(d[0])+abs(d[1]))//2
-            if abs(d[0])==abs(d[1]):
-                d = [d[0] // abs(d[0]) ,d[1] // abs(d[1])]
+    visited[password[idx]] = True
+    idx += 1
 
-        r = bf[0]
-        c = bf[1]
-        # print(r, c)
-        # print(dist)
-        # print(d)
-        for k in range(dist):
-            r += d[0]
-            c += d[1]
-
-            if dist > 1 and not (r==cur[0] and c==cur[1]) and len(arr[r][c]) == 0:
-                # print("d요기")
-                answer = "NO"
-                return
-            if r==cur[0] and c==cur[1] and len(arr[r][c]):
-                answer="NO"
-                return
-
-            if d in arr[r][c]:
-                # 불가능 체크
-                # print("요기??")
-                answer = "NO"
-                return
-            arr[r][c].append(d)
-
-
-N = int(input())
-lst = list(map(int, input().split()))
-
-
-
-arr = [[[] for _ in range(3)] for i in range(3)]
-point_dict = {1: (0, 0), 2: (0, 1), 3: (0, 2), \
-              4: (1, 0), 5: (1, 1), 6: (1, 2), \
-              7: (2, 0), 8: (2, 1), 9: (2, 2)}
-
-st = point_dict[lst[0]]
-arr[st[0]][st[1]].append(-1)
-if len(lst) <3:
-    print("NO")
+if flag:
+    print('YES')
 else:
-    answer = "YES"
-    check()
-    print(answer)
+    print('NO')
