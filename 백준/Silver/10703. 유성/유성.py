@@ -38,4 +38,4 @@ for c in range(m):
             arr[r+down][c] = 'X'
 
 for i in range(n):
-    print(*arr[i], sep="")
+    print(''.join(arr[i]))
