@@ -38,16 +38,15 @@ sys.setrecursionlimit(10000)
 def dfs(level, si, sj):
     global answer
     #이미 찾았으면
-    if level >= answer:
+    if level >= answer or level == 4:
         return
-    if level <= 3:
-        # print("다고름")
-        down = down_ladder(garo)
-        # print(lst)
-        if check(down):
-            answer = level
-            return
-    elif level==4:
+
+    # down = (garo)
+    # if check(down):down_ladder
+    #     answer = level
+    #     return
+    if check_down_ladder():
+        answer = level
         return
 
     #선택할 가로 사다리 탐색
@@ -77,8 +76,7 @@ def dfs(level, si, sj):
             dfs(level + 1, ni, nj)
             garo[i][j]=0
 
-def down_ladder(garo):
-    down_lst = [0]*(N+1)
+def check_down_ladder():
     for i in range(1, N+1): #출발 세로선 번호
         sero = i
         for j in range(1, H+1):
@@ -87,15 +85,16 @@ def down_ladder(garo):
                 # print("오른쪽 이동")
             elif sero-1>=1 and garo[j][sero-1]:
                 sero -=1
-        down_lst[sero] = i
-    return down_lst
-
-
-def check(down):
-    for i in range(1, N):
-        if down[i] != i:
+        if sero!=i:
             return False
     return True
+
+
+# def check(down):
+#     for i in range(1, N):
+#         if down[i] != i:
+#             return False
+#     return True
 #세로선 개수, 입력되는 가로선 개수, 세로선 마다 놓을 수 있는 위치의 개수(행 값)
 N, M, H = map(int, input().split())
 
@@ -107,9 +106,7 @@ for i in range(M):
     a, b = map(int, input().split())
     garo[a][b] = 1
 
-down = down_ladder(garo)
-# print(down)
-if check(down):
+if check_down_ladder():
     print(0)
 else:
     answer = 4
