@@ -1,26 +1,30 @@
+def oob(c):
+    return c<0 or c>=100001
+
 from collections import deque
+N, K = map(int, input().split())
 
-n, k = map(int, input().split())
+if K<N:
+    print(N-K)
+else:
+    q = deque([(N, 0)])
+    visited = [100001]*100001
+    visited[N] = 0
+    answer = 100001
+    while q:
+        cur, rank = q.popleft()
+        if cur == K:
+            answer = min(rank, answer)
+            continue
+        if not oob(cur*2) and  visited[cur*2]>rank:
+            visited[cur*2] = rank
+            q.append((cur*2, rank))
 
-visited = [100002] * 100001
+        if not oob(cur+1) and visited[cur+1]>rank+1:
+            visited[cur+1] = rank+1
+            q.append((cur+1, rank+1))
 
-q = deque([[n, 0]])
-visited[n] = 0
-answer = 100002
-while q:
-    now = q.popleft()
-    rank = now[1]
-    if now[0] == k:
-        answer = min(rank, answer)
-
-    if now[0] * 2 <= 100000 and visited[now[0] * 2]>rank:
-        q.append([now[0] * 2, rank])
-        visited[now[0] * 2] = rank
-    if now[0] - 1 >= 0 and visited[now[0] - 1]>rank+1:
-        q.append([now[0] - 1, rank + 1])
-        visited[now[0] - 1] = rank+1
-    if now[0] + 1 <= 100000 and visited[now[0] + 1]>rank+1:
-        q.append([now[0] + 1, rank + 1])
-        visited[now[0] + 1] = rank+1
-
-print(answer if answer < 100002 else 0)
+        if not oob(cur-1) and visited[cur-1]>rank+1:
+            visited[cur-1] = rank+1
+            q.append((cur-1, rank+1))
+    print(answer)
