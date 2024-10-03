@@ -1,99 +1,96 @@
-"""뒤집어엎기"""
 from collections import deque
 
+
+# bfs 구현
+
 def bfs(i, j):
-    q = deque([(i,j)])
-    v = arr[i][j]
+    q = deque([(i, j)])
     visited[i][j] = 1
-    lst = []
+    lst = [(i, j)]
+
     while q:
-        r, c = q.popleft()
-        lst.append((r,c))
+        cr, cc = q.popleft()
         for di, dj in (-1, 0), (0, 1), (1, 0), (0, -1):
-            du = r+di
-            dv = c+dj
-            if dv == -1:
-                dv = M-1
-            elif dv==M:
-                dv = 0
-            if du<0 or du>=N:
-                continue
-            if visited[du][dv]:
-                continue
-            if arr[du][dv] == v:
-                visited[du][dv] = 1
-                q.append((du,dv))
-    return lst
-N, M, T = map(int, input().split())
-arr = [deque(list(map(int, input().split()))) for _ in range(N)]
-# q = deque([0, 0, 1]) #rotate >0 시계방향 <0 반시계방향
+            du, dv = cr + di, cc + dj
+            if du < 1 or du > N: continue  # 원판은 1, N 연결 안됨
+            dv %= M
 
-for t in range(T):
-    visited = [[0]*M for _ in range(N)]
+            if visited[du][dv] or arr[du][dv] != arr[i][j]: continue
+            visited[du][dv] = 1
+            q.append((du, dv))
+            lst.append((du, dv))
+
+    if len(lst) > 1:
+        for r, c in lst:
+            arr[r][c] = -1
+    return len(lst) - 1
+
+
+# 입력 / 배열 준비
+N, M, Q = map(int, input().split())
+arr = [-1] + [deque(list(map(int, input().split()))) for _ in range(N)]
+
+# for 문 (Q번 진행)
+for q in range(Q):
+    # 입력
     x, d, k = map(int, input().split())
-    if d == 1:
-        k *= -1
-    for i in range(x-1, N, x):
-        arr[i].rotate(k)
+    d = 1 if d == 0 else -1
+    # 회전시키기
+    for t in range(x, N + 1, x):
+        # print(k)
+        arr[t].rotate(d * k)
 
-    change = False
-    #인접 동일 숫자 지우기
-    for i in range(N):
+    # print("==============회전 테스트 ==================")
+    # print(x, d, k)
+    # for t in range(1, N+1):
+    #     print(arr[t])
+    # print("=========================================")
+
+    # 인접 같은 숫자 삭제 -> BFS 활용 . -1 로 만들기
+    # 삭제 여부 flag 활용
+    flag = False
+    visited = [[0] * M for _ in range(N + 1)]
+    for i in range(1, N + 1):
         for j in range(M):
-            v = arr[i][j]
-            if v==0:
-                continue
-            lst = bfs(i, j)
-            # print(lst)
-            if len(lst)==1:
-                continue
-            for r, c in lst:
-                arr[r][c] = 0
-                change = True
-            # flag = False
-            # #안쪽 원
-            # if i-1>=0 and arr[i-1][j] == v:
-            #     arr[i-1][j] = 0
-            #     flag = True
-            # if i+1<N and arr[i+1][j] == v:
-            #     arr[i+1][j] = 0
-            #     flag = True
-            # if arr[i][(j+(M-1))%M] == v:
-            #     arr[i][(j+(M-1))%M] = 0
-            #     flag = True
-            # if arr[i][(j+1)%M] == v:
-            #     arr[i][(j + 1) % M] = 0
-            #     flag= True
-            # if flag:
-            #     arr[i][j] = 0
-            #     change = True
-    # print("지운 후 ")
-    # for k in range(N):
-        # print(arr[k])
-    # print("")
-    #지워진 적 없으면 평균내기
-    if not change:
-        # print("지운 적 없음")
-        sum_num = 0
-        cnt = 0
-        for i in range(N):
-            for j in range(M):
-                if arr[i][j]:
-                    sum_num+= arr[i][j]
-                    cnt+=1
-        if cnt!=0:
-            mean = sum_num / cnt
-            # print(mean)
-            for r in range(N):
-                for c in range(M):
-                    if arr[r][c]==0:
-                        continue
-                    if arr[r][c]>mean:
-                        arr[r][c]-=1
-                    elif arr[r][c]<mean:
-                        arr[r][c]+=1
+            if not visited[i][j] and arr[i][j] != -1:
+                result = bfs(i, j)
+                if result: flag = 1
 
-s = 0
-for i in range(N):
-    s += sum(arr[i])
-print(s)
+    # print("==============수 지우기 테스트 =====================")
+    # for t in range(1, N+1):
+    #     print(arr[t])
+    # print("==============================================")
+
+    # 삭제된 적 없으면 정규화를 위한 평균 구하기
+    if flag: continue
+    s = 0
+    cnt = 0
+    for i in range(1, N + 1):
+        for j in range(M):
+            if arr[i][j] == -1:
+                continue
+            cnt += 1
+            s += arr[i][j]
+    # cnt == 0 이면 정규화 안함
+    if cnt == 0: break
+    # 정규화하기
+    arr_mean = s / cnt
+    # print("평균 : ", s//cnt)
+    for i in range(1, N + 1):
+        for j in range(M):
+            if arr[i][j] == -1: continue
+            if arr[i][j] > arr_mean:
+                arr[i][j] -= 1
+            elif arr[i][j] < arr_mean:
+                arr[i][j] += 1
+    # print()
+    # for t in range(1, N+1):
+    #     print(arr[t])
+ans = 0
+for i in range(1, N + 1):
+    for j in range(M):
+        if arr[i][j] == -1: continue
+        ans += arr[i][j]
+
+
+print(ans)
