@@ -1,181 +1,141 @@
 """
+4 x 4의 격자로 이루어진 체스판
+술래 말 하나만 사용하여 도둑말을 잡으며
+말의 방향이란 해당 말이 이동할 수 있는 방향을 의미하며
+상하좌우, 대각선에 해당하는 8가지의 방향의 종류
 
-=============구상 ==================
-**초기세팅
- 상어 (0, 0) 에 넣어두고 그 자리에 있는 물고기 방향 가지기.
+말판의 위치 0번 인덱스부터 시작
+각각의 도둑말에는 1이상 16이하의 번호가 서로 겹치지 않게 매겨져 있음
+
+초기에는 (0, 0)에 있는 도둑말을 잡으며 시작
+
+- 도둑말 이동
+    도둑말은 번호가 작은 순서대로 본인이 가지고 있는 이동 방향대로 이동
+    한 번의 이동에 한 칸을 이동
+    도둑 말은 이동할 수 있을 때까지 45도 반시계 회전  갈 수 있는 칸을 탐색
+    만약 이동할 수 있는 칸이 없다면 이동하지 않습니다.
+    그 이외의 경우에는 칸을 이동
+    해당 칸에 다른 도둑말이 있다면 해당 말과 위치를 바꿉니다.
 
 
-1. 물고기 이동
-    1~16 순서대로 이동
-    이동방법
-     - 자기가 가진 방향으로 갈 수 있으면(상어x / oob x) 이동
-        -물고기 있으면 자리바꾸기
-        -없으면 이동(빈칸이랑 바꾸기 해야함)
-    - 없으면 45도 반시계 회전
-        - 갈 수 있는데 찾아서 가고
-        - 한바퀴 다 돌아도 이동 불가하면 이동 x
+- 도둑 말의 이동이 모두 끝나면 술래말이 이동
+    이동 가능한 방향의 어느 칸이나 이동할 수 있습니다.
+     한 번에 여러개의 칸도 이동할 수 있습니다.
+    잡고자하는 도둑말로 이동할 때 지나는 칸들의 말들은 잡지 않습니다.
+    술래말은 도둑말이 없는 곳으로는 이동할 수 없습니다.
+    술래말은 도둑말을 잡을 때마다 잡은 도둑말의 방향을 갖게 됩니다.
 
-2. 상어 이동
-    - 자신의 방향대로 가능한 칸 수 중 하나로 이동
-        그 방향에서 가능한 칸 수 찾기
-        그 칸대로 for문 돌며 dfs 호출
-        - 배열 복사
-        - 물고기 먹기
 
-dfs ( 배열, 상어위치, 상어 방향, 먹은 물고기 번호의 합)
-
-    #물고기 이동시키는 함수 호출
-
-    #상어 이동 가능한 칸 카운트
-    # 0이면 return / 정답 갱신
-
-    #
-    # for 이동 가능한 칸
-    #     배열 복사
-    #     복사한 배열에서 이동 + 물고기 먹기
-    #     dfs 호출
+만약 술래말이 이동할 수 있는 곳에 도둑말이 더이상 존재하지 않으면 게임을 끝냅니다.
 
 """
 
-def dfs(arr, shark, sd, sm, fish_dir):
-
-    # print("+++++++++++++++++++++++Dfs 호출 ++++++++++++++++")
-    # print(dead_lst)
-    # print(sm)
-    # print("fish 정보 : ")
-    # print(fish_dir)
-    # print()
-
-    global answer
-    #물고기 이동 함수 호출
-    # print(dead_lst)
-    move_fish(arr, shark, fish_dir)
-
-    # print("================move 후 =================")
-    # print(dead_lst)
-    # for k in range(4):
-    #     print(arr[k])
-    #
-    # print(fish_dir)
-    # print("=======================================")
-    #
-    #
-    # print("shark 정보 !! : " , sd, eight_dir[sd])
-
-    # 상어 이동 가능한 칸 카운트
-    cnt = cal_shark_move(arr, shark, sd)
-    # print("cnt : ", cnt)
-    r, c = shark
-    # 0이면 return / 정답 갱신
-    di, dj = eight_dir[sd]
-
-    flag = False
-    # for 이동 가능한 칸
-    for k in range(1, cnt+1):
-        # print("k : ", k)
-        du = shark[0]+di*k
-        dv = shark[1]+dj*k
-        if arr[du][dv]==0:
-            continue
-
-        #     배열 복사
-        tmp_fish_dir = fish_dir[:]
-        tmp = [[] for _ in range(4)]
-        for y in range(4):
-            tmp[y] = arr[y][:]
-
-        #     복사한 배열에서 이동 + 물고기 먹기
-        tmp[r][c] = 0
-        catch = tmp[du][dv]
-        n_sd = tmp_fish_dir[catch]
-        tmp_fish_dir[catch] = -1
-        tmp[du][dv] = -1
-        flag = True
-
-        # print(f"===============물고기 잡아먹음  {catch}후 =================")
-        # print(dead_lst)
-        # for k in range(4):
-        #     print(tmp[k])
-        #
-        # print(fish_dir)
-        # print("=======================================")
-
-        # print("catch : " , catch , "죽임!!!!!!!!!!!!!!!!")
-        # print(tmp_fish_dir)
-
-
-        #     dfs 호출
-        dfs(tmp, (du, dv), n_sd, sm + catch, tmp_fish_dir)
-    if cnt == 0 or not flag:
-        answer = max(answer, sm)
-        return
-
-def find_fish(arr, i):
-    # print(f"=======================find fish {i} ===================")
-    for y in range(4):
-        for x in range(4):
-            if arr[y][x] == i:
-                return y, x
-
-def move_fish(arr, shark, tmp_fish_dir):
-    # print(tmp_fish_dir)
-    for i in range(1, 17):
-        # print(i)
-        # print(tmp_fish_dir[i])
-        if tmp_fish_dir[i]==-1:
-            continue
-        #물고기 찾기
-        y, x = find_fish(arr, i)
-        d = tmp_fish_dir[arr[y][x]]
-        #자기 자리부터 회전
-        for k in range(8):
-            di, dj = eight_dir[(d+k)%8]
-            du, dv = y+di, x+dj
-            if oob(du, dv) or (du, dv) == shark:
-                continue
-            tmp_fish_dir[arr[y][x]] = (d+k)%8
-            arr[y][x], arr[du][dv] = arr[du][dv], arr[y][x]
-            break
-
-def cal_shark_move(arr, shark, sd):
-    du, dv = shark
-    di, dj = eight_dir[sd]
-    cnt = 0
-    # print("sd" , sd)
-    while 1:
-        du += di
-        dv += dj
-        # print("du, dv ", du, dv)
-        if oob(du, dv):
-            break
-        cnt+=1
-    return cnt
 
 def oob(i, j):
-    return i<0 or j<0 or i>=4 or j>=4
+    return i < 0 or i >= 4 or j < 0 or j >= 4
 
-arr = [[0]*4 for _ in range(4)]
-eight_dir = (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)
-fish_dir = [0]*17
 
-#4개의 줄에 물고기 번호 / 방향 순으로 8개 숫자 들어옴
+def move_thief(arr, dir_lst, place_lst):
+    # 도둑 번호 순대로 움직이기
+    for i in range(1, 17):
+
+        cd = dir_lst[i]
+        if cd == -1: continue  # 이미 잡힌 도둑은 넘기기
+        cr, cc = place_lst[i]
+
+        for k in range(8):  # 내 방향부터 8방을 돌아본다
+            nd = (cd+k-1)%8+1
+
+
+            di, dj = DIR[nd]
+            nr = cr + di
+            nc = cc + dj
+            if oob(nr, nc): continue  # 범위 나가면 못가
+            if arr[nr][nc] == -1: continue #술래 있어서 못가
+            arr[cr][cc] = 0
+
+            #도둑이랑 자리를 바꾸게 되면
+            if arr[nr][nc] != 0:
+                nxt = arr[nr][nc]
+                #자리 바꾸기
+                place_lst[nxt] = (cr, cc)
+                arr[cr][cc] = nxt #빈칸 자리 바꾼 도둑번호로 채우기
+
+
+            arr[nr][nc] = i
+            place_lst[i] = (nr, nc)
+            dir_lst[i] = nd
+            break
+    return arr, dir_lst, place_lst
+
+
+def dfs(arr, score, dir_lst, place_lst, sr, sc, sd):
+    # 도둑 이동
+    arr, dir_lst, place_lst = move_thief(arr, dir_lst, place_lst)
+
+    # 술래 이동 가능한 lst 찾기
+    di, dj = DIR[sd]
+    nr, nc = sr+di, sc+dj
+    candi_lst = []
+    while not oob(nr, nc):
+        if arr[nr][nc] != 0:
+            candi_lst.append((nr, nc))
+        nr+=di
+        nc+=dj
+    if not candi_lst:
+        global answer
+        answer = max(answer, score)
+        return
+
+    tmp = [[] for _ in range(4)]
+    for r, c in candi_lst:
+        for t in range(4):
+            tmp[t] = arr[t][:]
+        tmp_dir_lst = dir_lst[:]
+        tmp_place_lst = place_lst[:]
+
+        #원래자리 빈칸 만들고
+        tmp[sr][sc] = 0
+        plus = tmp[r][c]
+        new_d = tmp_dir_lst[plus]
+        #도둑 잡기
+        tmp[r][c] = -1
+        tmp_dir_lst[plus] = -1
+        tmp_place_lst[plus] = -1
+        # print(f"============={r}, {c}로 술래 이동 후 ==========")
+        # for t in range(4):
+        #     print(tmp[t])
+        # print('=======================================')
+        dfs(tmp, score+plus, tmp_dir_lst, tmp_place_lst, r, c, new_d)
+
+
+
+    # 종료 조건
+
+    # 술래 이동시켜보기
+
+
+direction_lst = [0] * 17
+place_lst = [None] * 17
+arr = [[0] * 4 for _ in range(4)]
+DIR = (-1,), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)
 for i in range(4):
     lst = list(map(int, input().split()))
-    for j in range(0,8,2):
-        a, b = lst[j], lst[j+1]
-        arr[i][j//2] = a
-        fish_dir[a] = b-1
+    for j in range(0, 8, 2):
+        idx = lst[j]
+        d = lst[j + 1]
+        direction_lst[idx] = d
+        place_lst[idx] = (i, j // 2)
+        arr[i][j // 2] = idx
 
-
-answer = 0
-# for i in range(4):
-#     print(arr[i])
-r, c = 0, 0
+# 위치 저장, 점수 저장 후 배열에 술래 표기
+sr, sc = 0, 0
 num = arr[0][0]
-sd = fish_dir[num]
-# print(fish_dir)
 arr[0][0] = -1
-fish_dir[num] = -1
-
-dfs(arr, (r, c), sd ,num, fish_dir )
+# 방향 저장 후 잡힌 도둑 표기
+sd = direction_lst[num]
+direction_lst[num] = -1
+place_lst[num] = -1
+answer = 0
+dfs(arr, num, direction_lst, place_lst, sr, sc, sd)
 print(answer)

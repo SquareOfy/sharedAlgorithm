@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 111240 KB, 시간: 100 ms
+메모리: 109240 KB, 시간: 96 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2024년 9월 15일 16:38:21
+2024년 10월 4일 20:43:50
 
 ### 문제 설명
 
@@ -26,37 +26,37 @@
 
 <p>물고기의 이동이 모두 끝나면 상어가 이동한다. 상어는 방향에 있는 칸으로 이동할 수 있는데, 한 번에 여러 개의 칸을 이동할 수 있다. 상어가 물고기가 있는 칸으로 이동했다면, 그 칸에 있는 물고기를 먹고, 그 물고기의 방향을 가지게 된다. 이동하는 중에 지나가는 칸에 있는 물고기는 먹지 않는다. 물고기가 없는 칸으로는 이동할 수 없다. 상어가 이동할 수 있는 칸이 없으면 공간에서 벗어나 집으로 간다. 상어가 이동한 후에는 다시 물고기가 이동하며, 이후 이 과정이 계속해서 반복된다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/1c7c473e-5e2c-4c45-9c88-b3b7cd06a360/-/preview/" style="width: 333px; height: 338px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 333px; height: 338px;"></p>
 
 <p style="text-align: center;"><그림 1></p>
 
 <p><그림 1>은 청소년 상어가 공간에 들어가기 전 초기 상태이다. 상어가 공간에 들어가면 (0, 0)에 있는 7번 물고기를 먹고, 상어의 방향은 ↘이 된다. <그림 2>는 상어가 들어간 직후의 상태를 나타낸다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/8f26df12-6f68-43a3-9f6e-7416144e91dc/-/preview/" style="width: 328px; height: 332px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 328px; height: 332px;"></p>
 
 <p style="text-align: center;"><그림 2></p>
 
 <p>이제 물고기가 이동해야 한다. 1번 물고기의 방향은 ↗이다. ↗ 방향에는 칸이 있고, 15번 물고기가 들어있다. 물고기가 있는 칸으로 이동할 때는 그 칸에 있는 물고기와 위치를 서로 바꿔야 한다. 따라서, 1번 물고기가 이동을 마치면 <그림 3>과 같아진다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/75315b3c-ee04-4ae8-9422-5b1137f86117/-/preview/" style="width: 326px; height: 331px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 326px; height: 331px;"></p>
 
 <p style="text-align: center;"><그림 3></p>
 
 <p>2번 물고기의 방향은 ←인데, 그 방향에는 상어가 있으니 이동할 수 없다. 방향을 45도 반시계 회전을 하면 ↙가 되고, 이 칸에는 3번 물고기가 있다. 물고기가 있는 칸이니 서로 위치를 바꾸고, <그림 4>와 같아지게 된다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/7be317c7-b8b5-4b83-becb-ffd8550311fb/-/preview/" style="width: 327px; height: 329px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 327px; height: 329px;"></p>
 
 <p style="text-align: center;"><그림 4></p>
 
 <p>3번 물고기의 방향은 ↑이고, 존재하지 않는 칸이다. 45도 반시계 회전을 한 방향 ↖도 존재하지 않으니, 다시 회전을 한다. ← 방향에는 상어가 있으니 또 회전을 해야 한다. ↙ 방향에는 2번 물고기가 있으니 서로의 위치를 교환하면 된다. 이런 식으로 모든 물고기가 이동하면 <그림 5>와 같아진다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/a58fbda0-bb64-4773-b5f9-2da0bd3f0fd2/-/preview/" style="width: 330px; height: 329px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 330px; height: 329px;"></p>
 
 <p style="text-align: center;"><그림 5></p>
 
 <p>물고기가 모두 이동했으니 이제 상어가 이동할 순서이다. 상어의 방향은 ↘이고, 이동할 수 있는 칸은 12번 물고기가 있는 칸, 15번 물고기가 있는 칸, 8번 물고기가 있는 칸 중에 하나이다. 만약, 8번 물고기가 있는 칸으로 이동하면, <그림 6>과 같아지게 된다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/2431d117-fab6-4de9-8d76-2fb41d471ee7/-/crop/651x656/1,12/-/preview/" style="width: 326px; height: 328px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 326px; height: 328px;"></p>
 
 <p style="text-align: center;"><그림 6></p>
 
