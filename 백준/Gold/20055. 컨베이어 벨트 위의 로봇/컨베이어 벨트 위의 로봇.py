@@ -1,68 +1,88 @@
+"""
+ 무빙워크는 사람을 한 쪽 끝에서 반대쪽 끝으로 옮겨주는 기계
+ 다음과 같이 총 2n개의 판으로 구성
+무빙워크의 레일은 시계 방향으로 회전 (1, 2N 연결됨)
+
+각 사람은 1번 칸에 올라서서 n번 칸에서 내리게 됩니다.
+사람이 어떤 칸에 올라가거나 이동하면
+그 칸의 안정성은 즉시 1만큼 감소하게 되며 안정성이 0인 칸에는 올라갈 수 없습니다.
+
+무빙워크가 한 칸 회전합니다.
+
+가장 먼저 무빙워크에 올라간 사람부터 무빙워크가 회전하는 방향으로 한 칸 이동할 수 있으면 이동합니다.
+만약 앞선 칸에 사람이 이미 있거나 앞선 칸의 안정성이 0인 경우에는 이동하지 않습니다.
+
+1번 칸에 사람이 없고 안정성이 0이 아니라면 사람을 한 명 더 올립니다.
+
+안정성이 0인 칸이 k개 이상이라면 과정을 종료합니다. 그렇지 않다면 다시 위의 과정을 반복합니다.
+
+단, 1~3 과정 중 n번 칸 위치에 사람이 위치하면 그 즉시 내리게 됩니다.
+각 칸의 안정성은 시간에 지남에 따라 다시 상승하지 않습니다.
+
+
+무빙워크가 종료될 때 몇 번째 실험 중이었는지를 출력
+"""
 from collections import deque
-"""
-1508 문제읽기 시작
-1516 문제 이해 완 / 주석 구상 시작
-1538 구현하고 디버깅,, 
-~1545 내리는 위치 항상 도달 즉시 내리는 것 처리 안한 것 발견 . ! 시간초과..
-1545~ 무한루프 가능성,, 테케 생각해보자. 종료 조건문 수정
-
-
-visited : 0 ~ 2N-1칸에 로봇 있/없 확인
-lst : 0~2N-1칸 내구도 관리
-q : 벨트 위의 로봇들 넣어두기
-up : 올리는 위치에 와 있는 칸의 idx /-1씩 줄어듬, mod 2N
-down : 내리는 위치에 와 있는 칸의 idx/ -1씩 줄어듬, mod 2N
-
-answer : 현재 단계 / 1부터 시작
-
-while문 내에서 주어진 단계 차례대로 수행
-    - 벨트 회전 ( up, down 조절)
-        로봇 이동 (내구도, visited 체크)
-    - 현재 올리는 위치의 내구도 visited 체크 후 로봇 올리기(내구도 -=1 visited체크)
-    - 내구도 0 개수 확인 및 break
-    - answer 더하기
-"""
-
-n, k = map(int, input().split())
-lst = list(map(int, input().split()))
-mod = 2*n
-power = lst.count(0)
-visited = [0] * (2*n)
-up = 0
-down = n-1
-q = deque([])
-answer = 1
+#입력
+N, K = map(int, input().split())
+stability_lst = list(map(int, input().split()))
+moving_q = deque([i for i in range(2*N)])
+visited = [0]*(2*N)
+answer = 0
+cnt = 0
+people_lst = []
+#while
 while 1:
-    up = (up-1)%mod
-    down = (down-1)%mod
+    answer += 1
+    #rotate
+    moving_q.rotate(1)
 
-    size = len(q)
-    for i in range(size):
-        t = q.popleft()
-        nt = (t+1)%mod
-        if t==down:
-            visited[t] = 0
-            continue
-        if not visited[nt] and lst[nt]>0:
-            visited[t]=0
-            lst[nt]-= 1
-            if lst[nt]==0:
-                power += 1
-            if nt!= down:
-                visited[nt] = 1
+    up = moving_q[0]
+    down = moving_q[N-1]
 
-                q.append(nt)
-        else:
-            q.append(t)
+    #N-1에 있는 사람 내리기
+    visited[down] = 0
+    # print()
+    # print(moving_q)
+    # print(visited)
+    # print(people_lst)
+    # print("stable : ", stability_lst)
+    # print()
 
-    if not visited[up] and lst[up]>0:
-        q.append(up)
+    new_people = []
+    #사람이동 2*N 부터 순차적으로 볼 것.
+    for i in people_lst:
+        #사람 있으면 이동할 칸 보기
+        if visited[i]:
+            nxt = (i+1)%(2*N)
+            #안정성 0이거나 앞 칸에 사람 있으면 이동 불가
+            if stability_lst[nxt] ==0 or visited[nxt]:
+                new_people.append(i)
+                continue
+            #앞칸 내리는 위치면 안정성만 -1
+            #아니면 visited 처리도 하기
+
+            if nxt != down:
+                visited[nxt] = 1
+                new_people.append(nxt)
+
+            stability_lst[nxt] -= 1
+
+            #안정성 앞자리 0 되면 cnt+1
+            if stability_lst[nxt] == 0:
+                cnt+=1
+
+            #기존 visited해제
+            visited[i] = 0
+    people_lst = new_people[:]
+    # 1에 사람 올리기
+    if not visited[up] and stability_lst[up] > 0:
         visited[up] = 1
-        lst[up]-=1
-        if lst[up]==0:
-            power +=1
-    if power >= k:
-       break
-    answer+=1
-
+        people_lst.append(up)
+        stability_lst[up] -= 1
+        if stability_lst[up] == 0:
+            cnt += 1
+    #종료조건 체크
+    if cnt>=K:
+        break
 print(answer)
