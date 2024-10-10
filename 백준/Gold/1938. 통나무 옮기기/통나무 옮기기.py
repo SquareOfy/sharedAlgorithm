@@ -39,7 +39,7 @@ def is_possible(r, c, d, order):
         dv = c + dj
         if oob(du, dv):
             return False
-        if arr[du][dv]:
+        if arr[du][dv]=='1':
             return False
     return True
 
@@ -92,8 +92,6 @@ for i in range(N):
             else:
                 e_first = (i, j)
 
-arr = [list(map(int, arr[i])) for i in range(N)]
 visited = [[[0] * 2 for _ in range(N)] for _ in range(N)]
-# dfs(0, start)
 answer = bfs()
 print(answer if answer != inf else 0)
