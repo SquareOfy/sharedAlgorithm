@@ -4,43 +4,32 @@
 #include <string>
 
 using namespace std;
-vector<int> result(7);
-vector<int> heights;
 
-bool flag = 0;
-void pick_height(int level, int nxtIdx, int sum) {
-	if (7 - level > 9 - nxtIdx) {
-		return;
-	}
-	if (flag) {
-		return;
-	}
-	if (level == 7) {
-		if (not flag && sum == 100) {
-			flag = 1;
-			for (int h : result) {
-				cout << h << endl;
-			}
-		}
-		
-		return;
-	}
-	for (int i = nxtIdx; i < 9; i++) {
-		result[level] = heights[i];
-		pick_height(level + 1, i + 1, sum + heights[i]);
-	}
-
-}
 
 int main() {
+	vector<int> lst;
 	int input;
+	int sum = 0;
 	for (int i = 0; i < 9; i++) {
 		cin >> input;
-		heights.push_back(input);
-
+		sum += input;
+		lst.push_back(input);
 	}
-	sort(heights.begin(), heights.end());
-	pick_height(0, 0, 0);
+	bool flag = 0;
+	for (int i = 0; i < 9 && !flag; i++) {
+		for (int j = i+1; j < 9; j++) {
+			if (sum - lst[i] - lst[j] == 100) {
+				lst[i] = 0;
+				lst[j] = 0;
+				flag= 1;
+				break;
+			}
+		}
+	}
+	sort(lst.begin(), lst.end());
+	for (int i = 2; i < 9; i++) {
+		cout << lst[i] << endl;
+	}
 
 
 	return 0;
