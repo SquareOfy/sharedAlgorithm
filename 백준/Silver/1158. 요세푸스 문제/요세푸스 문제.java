@@ -1,38 +1,44 @@
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		
-		Queue<Integer> List = new LinkedList<>();
+		StringBuilder sb = new StringBuilder();
 		int N = sc.nextInt();
 		int K = sc.nextInt();
 		
-		Queue<Integer> seq = new LinkedList<>();
-
-		for(int n=1; n<=N; n++) {
-			List.offer(n);
+		Queue<Integer> queue = new LinkedList<Integer>();
+		List<Integer> answerList = new LinkedList<Integer>();
+		for(int i=1; i<=N; i++) {
+			queue.add(i);
 		}
 		
-		while(List.size()>1) {
-			for(int i=0; i<K-1; i++) {
-				int temp = List.poll();
-				List.offer(temp);
-				
+		int cnt = 0;
+	
+		while(!queue.isEmpty()) {
+			cnt ++;
+			int now = queue.poll();
+			if(cnt==K) {
+				cnt = 0;
+				answerList.add(now);
+				continue;
 			}
-			seq.offer(List.poll());
+			queue.add(now);
 		}
-		seq.offer(List.poll());
 		
-		System.out.print("<");
-		while(!seq.isEmpty()) {
-			if(seq.size()>1) System.out.print(seq.poll()+", ");
-			else System.out.print(seq.poll());
+		sb.append("<");
+		for(int i=0; i<N; i++) {
+			sb.append(answerList.get(i));
+			if(i!=N-1) {
+				sb.append(", ");
+			}
 		}
-		System.out.print(">");
-		
-		
+		sb.append(">");
+		System.out.println(sb.toString());
 	}
+
 }
