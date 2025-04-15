@@ -1,107 +1,68 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class Main{
-	static class Tomato {
-		int row;
-		int column;
-		int rank;
-		
-		Tomato(int r, int c, int rank){
-			this.row= r;
-			this.column =c;
-			this.rank = rank;
-		}
-	}
+public class Main {
 	
-	static int M;
-	static int N;
-	static int[][] map;
-	static boolean[][] visited;
-	static int[] dr = {-1, 1, 0, 0};
-	static int[] dc = {0, 0, -1, 1};
-	static Queue<Tomato> queue = new LinkedList<>();
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static int[] dr = {-1, 0, 1, 0};
+	static int[] dc = {0, -1, 0, 1};
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 		StringTokenizer st;
-
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-
-		map = new int[M][N];
-		visited = new boolean[M][N];
-		int max = -1;
-		for(int m=0; m<M; m++) {
-			st = new StringTokenizer(br.readLine());
-			for(int n=0; n<N; n++) {
-				map[m][n] = Integer.parseInt(st.nextToken());
-			}
-		}
+		int M = sc.nextInt();
+		int N = sc.nextInt();
+		sc.nextLine();
+		int[][] map = new int[N][M];
 		
-		for(int m=0; m<M; m++) {
-			for(int n=0; n<N; n++) {
-				if(map[m][n]==1) {
-					queue.add(new Tomato(m,n,0));
-					visited[m][n] = true;
+		
+		Queue<int[]> q = new LinkedList<int[]>();
+		Queue<int[]> nq = new LinkedList<int[]>();
+		
+		int tomato = 0;
+		int ripeCnt = 0;
+		int day = 0;
+		for(int i=0; i<N; i++) {
+			st = new StringTokenizer(sc.nextLine());
+			for(int j=0; j<M; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if (map[i][j]==1) {
+					q.add(new int[] {i, j});
+				}else if(map[i][j] ==0) {
+					tomato++;
 				}
-			}
+			}	
 		}
-				
-				max = BFS();
-				
-				
-				
+		
+		while(!q.isEmpty()) {
+			int[] now = q.poll();
 			
-		
-		if(check()) System.out.println(max);
-		else System.out.println(-1);
-		
-		
-		
-		
-		
-	}
-	
-	static boolean check() {
-		for(int m=0; m<M; m++) {
-			for(int n=0; n<N; n++) {
-				if(map[m][n]==0 && !visited[m][n]) return false;
-			}
-		}
-		return true;
-	}
-
-	static int BFS() {
-		int result = 0;
-
-		while(!queue.isEmpty()) {
-			Tomato curr = queue.poll();
 			for(int i=0; i<4; i++) {
-			int du = curr.row + dr[i];
-			int dv = curr.column + dc[i];
-			if(du>=0 && du<M && dv>=0 && dv<N) {
-				if(!visited[du][dv]&&map[du][dv]==0) {
-					int rank = curr.rank;
-					queue.add(new Tomato(du, dv, rank+1));
-					visited[du][dv] = true;
-					result = Math.max(result, rank+1);
-				}
+				int du = now[0]+dr[i];
+				int dv = now[1]+dc[i];
+				
+				if (du<0 || du>=N || dv<0 || dv>=M) continue;
+				if (map[du][dv]==1 || map[du][dv]==-1) continue;
+				map[du][dv] = 1;
+				ripeCnt ++;
+				nq.add(new int[] {du,dv});
 			}
 			
+			if(q.isEmpty()) {
+				q = nq;
+				nq = new LinkedList<int[]>();
+				day++;
 			}
 		}
 		
-		return result;
+		if(ripeCnt != tomato) {
+			System.out.println(-1);
+		}else {
+			System.out.println(--day);
+		}
+		
 	}
-	
-	
-
 
 }
-
-
