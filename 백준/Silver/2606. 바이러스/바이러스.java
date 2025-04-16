@@ -1,52 +1,50 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
-public class Main {
-	static List<Integer>[] list; 
-	static boolean[] visited;
-	static int N;
-	static int cnt;
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		StringTokenizer st; 
-		
-		N = Integer.parseInt(br.readLine());
-		int M = Integer.parseInt(br.readLine());
-		list = new ArrayList[N+1];
-		visited = new boolean[N+1];
-		cnt = 0;
-		for(int n=1; n<=N; n++) {
-			list[n] = new ArrayList<>();
-		}
-		
-		for(int n=0; n<M; n++) {
-			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			list[a].add(b);
-			list[b].add(a);
-		}
-		
-		DFS(1);
-		System.out.println(cnt);
-		
-	}
+public class Main{
 	
-	static void DFS(int n) {
-		visited[n] = true;
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 		
-		for(int k=0; k<list[n].size(); k++) {
-			int r = list[n].get(k);
-			if(!visited[r]) {
-				cnt++;
-				DFS(r);
+		int N = sc.nextInt();
+		int M = sc.nextInt();
+		
+		ArrayList<Integer>[] adj = new ArrayList[N+1];
+		for(int i=1; i<=N; i++) {
+			adj[i] = new ArrayList<>();
+		}
+		boolean[] visited = new boolean[N+1];
+		
+		
+		for(int i=0; i<M; i++) {
+			int a = sc.nextInt();
+			int b = sc.nextInt();
+			adj[a].add(b);
+			adj[b].add(a);
+		}
+		
+		Queue<Integer> q = new LinkedList<>();
+		int answer = 0;
+		
+		visited[1] = true;
+		q.add(1);
+		
+		while(!q.isEmpty()) {
+			int now = q.poll();
+			
+			for(int next : adj[now]) {
+				if(visited[next]) continue;
+				answer ++;
+				visited[next] = true;
+				q.add(next);
 			}
 		}
+		
+		System.out.println(answer);
 	}
+	
 
 }
