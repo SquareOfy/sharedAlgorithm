@@ -32,7 +32,7 @@ class Solution {
 				double mid = 0;
 				double value = 0;
 				
-				while(left<=right) {
+				while(left<right) {
 					
 					mid = (left+right)/2;
 					value = 0;
